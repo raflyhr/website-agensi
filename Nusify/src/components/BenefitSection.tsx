@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sparkles, ShieldCheck, MessageSquare, MousePointerClick, TrendingUp } from 'lucide-react';
 import NusifyMascot from './NusifyMascot';
 

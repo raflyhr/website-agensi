@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, MessageCircle, Send, Clock, User } from 'lucide-react';
 
 const WhatsAppWidget = () => {

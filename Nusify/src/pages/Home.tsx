@@ -1,13 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import {
-  ChevronRight,
-  Rocket,
-  Code,
-  Layout,
-  Cpu,
-  MessageCircle,
-} from "lucide-react";
+import { Rocket, Code, Layout, Cpu, MessageCircle } from "lucide-react";
 import DigitalEraSection from "../components/DigitalEraSection";
 import ProblemAwarenessSection from "../components/ProblemAwarenessSection";
 import BenefitSection from "../components/BenefitSection";

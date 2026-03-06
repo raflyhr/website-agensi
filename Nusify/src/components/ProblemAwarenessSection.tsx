@@ -1,4 +1,3 @@
-import React from 'react';
 import { Target, Users, Search, AlertCircle, BarChart3, Globe } from 'lucide-react';
 import NusifyMascot from './NusifyMascot';
 
