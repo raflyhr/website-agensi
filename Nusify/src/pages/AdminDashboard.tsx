@@ -7,6 +7,7 @@ import {
   Globe, Instagram, Twitter, Facebook, Youtube, Phone, Mail,
   Sun, Moon,
 } from 'lucide-react';
+import { useTheme } from "../context/ThemeContext";
 
 // ─────────────── TYPES ───────────────
 type ClientStatus = 'New' | 'Contacted' | 'In Progress' | 'Completed';
@@ -769,6 +770,10 @@ const navItems: { id: Section; label: string; icon: React.FC<{ className?: strin
 ];
 
 const AdminDashboard = () => {
+  const { theme, toggleTheme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
+  const setIsDark = (v: boolean) => setTheme(v ? 'dark' : 'light');
+
   const [active, setActive] = useState<Section>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [clients, setClients] = useState<Client[]>(initClients);
@@ -778,19 +783,6 @@ const AdminDashboard = () => {
   const [blog, setBlog] = useState<BlogPost[]>(initBlog);
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initTestimonials);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(initSettings);
-
-  // Auto dark mode based on time: 06:00–18:00 = light, else = dark
-  const getAutoTheme = () => {
-    const h = new Date().getHours();
-    return h < 6 || h >= 18;
-  };
-  const [isDark, setIsDark] = useState(getAutoTheme);
-
-  // Re-check every minute in case minute flips 06:00 or 18:00
-  useEffect(() => {
-    const interval = setInterval(() => setIsDark(getAutoTheme()), 60_000);
-    return () => clearInterval(interval);
-  }, []);
 
   const newClients = clients.filter(c => c.status === 'New').length;
   const currentNav = navItems.find(n => n.id === active);
@@ -812,7 +804,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className={`flex min-h-screen bg-slate-100 dark:bg-slate-950 ${isDark ? 'dark' : ''}`}>
+    <div className={`flex min-h-screen bg-slate-100 dark:bg-slate-950`}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />
