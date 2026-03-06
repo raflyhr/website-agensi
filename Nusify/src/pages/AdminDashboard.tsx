@@ -120,27 +120,6 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 
 const inputCls = "w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-sm";
 
-// ─────────────── CHART COMPONENTS ───────────────
-const BarChart = ({ data, color }: { data: number[], color: string }) => {
-  const max = Math.max(...data);
-  return (
-    <div className="flex items-end gap-1.5 h-32 w-full px-2">
-      {data.map((val, i) => (
-        <div key={i} className="flex-1 flex flex-col items-center gap-1 group">
-          <div
-            className={`w-full rounded-t-md transition-all duration-500 group-hover:opacity-80 ${color}`}
-            style={{ height: `${(val / max) * 100}%` }}
-          >
-            <div className="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded whitespace-nowrap pointer-events-none transition-opacity">
-              {val}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const LineChart = ({ data, color }: { data: number[], color: string }) => {
   const max = Math.max(...data);
   const width = 300;
@@ -259,24 +238,6 @@ const DashboardOverview = ({ clients, portfolio, posts }: { clients: Client[]; p
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-5">
-            <h2 className="text-base font-extrabold text-slate-900 dark:text-white mb-6">Request Distribution</h2>
-            <BarChart data={[4, 8, 3, 6, 9]} color="bg-indigo-500" />
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              {[
-                { label: 'Landing Page', val: '40%' },
-                { label: 'Company Profile', val: '30%' },
-                { label: 'E-Commerce', val: '20%' },
-                { label: 'Web Application', val: '10%' },
-              ].map(item => (
-                <div key={item.label}>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase truncate">{item.label}</p>
-                  <p className="text-sm font-extrabold text-slate-900 dark:text-white">{item.val}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl shadow-blue-500/20">
             <p className="text-xs font-bold text-blue-100 uppercase tracking-widest mb-2">Pro Tip</p>
             <h3 className="text-lg font-extrabold mb-3">Optimize your conversion</h3>
@@ -684,7 +645,7 @@ const AnalyticsSection = () => {
     <div className="space-y-6">
       <SectionHeader title="Dashboard Analytics" subtitle="Statistik performa website dan konversi client" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
           <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-6">Client Response Trend</h3>
           <div className="h-64">
@@ -692,31 +653,6 @@ const AnalyticsSection = () => {
           </div>
           <div className="flex items-center justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase">
             <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
-          <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-6">New vs Completed Projects</h3>
-          <div className="h-64 flex items-end gap-3 px-4">
-            <div className="flex-1 flex flex-col gap-1 items-center">
-              <div className="w-full bg-blue-500 rounded-t-lg h-32"></div>
-              <div className="w-full bg-emerald-500 rounded-t-lg h-40"></div>
-              <span className="text-[10px] font-bold text-slate-400 mt-2">WEEK 1</span>
-            </div>
-            <div className="flex-1 flex flex-col gap-1 items-center">
-              <div className="w-full bg-blue-500 rounded-t-lg h-48"></div>
-              <div className="w-full bg-emerald-500 rounded-t-lg h-36"></div>
-              <span className="text-[10px] font-bold text-slate-400 mt-2">WEEK 2</span>
-            </div>
-            <div className="flex-1 flex flex-col gap-1 items-center">
-              <div className="w-full bg-blue-500 rounded-t-lg h-56"></div>
-              <div className="w-full bg-emerald-500 rounded-t-lg h-52"></div>
-              <span className="text-[10px] font-bold text-slate-400 mt-2">WEEK 3</span>
-            </div>
-          </div>
-          <div className="flex justify-center gap-6 mt-6">
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-blue-500" /> <span className="text-xs font-bold text-slate-600 dark:text-slate-300">New Requests</span></div>
-            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-emerald-500" /> <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Completed</span></div>
           </div>
         </div>
       </div>
