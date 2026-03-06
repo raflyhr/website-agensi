@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Briefcase, Settings, LogOut,
   TrendingUp, Eye, MessageSquare, Star, Menu, X, Zap, Bell,
   FileText, Tag, Plus, Pencil, Trash2, Check, ChevronDown,
   Globe, Instagram, Twitter, Facebook, Youtube, Phone, Mail,
+  Sun, Moon,
 } from 'lucide-react';
 
 // ─────────────── TYPES ───────────────
@@ -68,9 +69,9 @@ const initTestimonials: Testimonial[] = [
   { id: 3, name: 'Ahmad Fauzi', company: 'Toko Sejahtera', review: 'E-commerce kami kini berjalan lancar. Sangat puas dengan pelayanannya.', rating: 4 },
 ];
 const initSettings: SiteSettings = {
-  logo: '/logo.png', email: 'hello@devcraft.id', phone: '+62 812 3456 7890',
+  logo: '/logo.png', email: 'hello@nusify.id', phone: '+62 812 3456 7890',
   address: 'Jl. Jenderal Sudirman No.10, Jakarta 10220',
-  instagram: 'devcraft.id', twitter: 'devcraftid', facebook: 'devcraft.id', youtube: 'devcraft',
+  instagram: 'nusify.id', twitter: 'nusifyid', facebook: 'nusify.id', youtube: 'nusify',
 };
 
 // ─────────────── SHARED COMPONENTS ───────────────
@@ -264,6 +265,17 @@ const PortfolioSection = ({ items, setItems }: { items: Portfolio[]; setItems: (
   };
   const del = (id: number) => setItems(items.filter(i => i.id !== id));
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm({ ...form, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div>
       <SectionHeader title="Portfolio" subtitle={`${items.length} project terdaftar`} onAdd={openAdd} addLabel="Tambah Portfolio" />
@@ -293,7 +305,17 @@ const PortfolioSection = ({ items, setItems }: { items: Portfolio[]; setItems: (
           <Field label="Nama Project"><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className={inputCls} placeholder="Nama project" /></Field>
           <Field label="Deskripsi"><textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className={inputCls} rows={3} placeholder="Deskripsi singkat" /></Field>
           <Field label="Link Website"><input value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} className={inputCls} placeholder="https://..." /></Field>
-          <Field label="URL Gambar"><input value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} className={inputCls} placeholder="https://..." /></Field>
+          <Field label="Tambah Gambar">
+            <input type="file" accept="image/*" onChange={handleImageUpload} className={inputCls} />
+            {form.image && (
+              <div className="mt-3 relative aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+                <button onClick={() => setForm({ ...form, image: '' })} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg shadow-lg hover:bg-red-600 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </Field>
           <Field label="Tech Stack"><input value={form.tech} onChange={e => setForm({ ...form, tech: e.target.value })} className={inputCls} placeholder="React, Tailwind, ..." /></Field>
           <div className="flex gap-3 mt-2">
             <button onClick={() => setOpen(false)} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
@@ -537,14 +559,57 @@ const TestimonialsSection = ({ items, setItems }: { items: Testimonial[]; setIte
 };
 
 // Settings
-const SettingsSection = ({ settings, setSettings }: { settings: SiteSettings; setSettings: (s: SiteSettings) => void }) => {
+const SettingsSection = ({
+  settings, setSettings, isDark, setIsDark,
+}: {
+  settings: SiteSettings; setSettings: (s: SiteSettings) => void;
+  isDark: boolean; setIsDark: (v: boolean) => void;
+}) => {
   const [form, setForm] = useState(settings);
   const [saved, setSaved] = useState(false);
   const save = () => { setSettings(form); setSaved(true); setTimeout(() => setSaved(false), 2000); };
 
+  const hour = new Date().getHours();
+  const isAutoDay = hour >= 6 && hour < 18;
+
   return (
     <div>
       <SectionHeader title="Settings" subtitle="Pengaturan website agency" />
+
+      {/* Theme Settings Card */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 mb-6">
+        <h3 className="font-extrabold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          {isDark ? <Moon className="w-5 h-5 text-indigo-500" /> : <Sun className="w-5 h-5 text-amber-500" />}
+          Tampilan Dashboard
+        </h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+          Mode saat ini disesuaikan otomatis berdasarkan waktu&nbsp;
+          <span className="font-semibold text-blue-600 dark:text-blue-400">
+            ({isAutoDay ? '☀️ Siang (06:00–18:00)' : '🌙 Malam (18:00–06:00)'})
+          </span>. Kamu bisa mengubahnya secara manual di bawah.
+        </p>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setIsDark(false)}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-bold transition-all ${
+              !isDark
+                ? 'border-amber-400 bg-amber-50 text-amber-700'
+                : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+            }`}>
+            <Sun className="w-4 h-4" /> Light Mode
+          </button>
+          <button
+            onClick={() => setIsDark(true)}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-bold transition-all ${
+              isDark
+                ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
+                : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+            }`}>
+            <Moon className="w-4 h-4" /> Dark Mode
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
           <h3 className="font-extrabold text-slate-900 dark:text-white mb-4 flex items-center gap-2"><Globe className="w-5 h-5 text-blue-600" /> Informasi Kontak</h3>
@@ -594,6 +659,19 @@ const AdminDashboard = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initTestimonials);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(initSettings);
 
+  // Auto dark mode based on time: 06:00–18:00 = light, else = dark
+  const getAutoTheme = () => {
+    const h = new Date().getHours();
+    return h < 6 || h >= 18;
+  };
+  const [isDark, setIsDark] = useState(getAutoTheme);
+
+  // Re-check every minute in case minute flips 06:00 or 18:00
+  useEffect(() => {
+    const interval = setInterval(() => setIsDark(getAutoTheme()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
   const newClients = clients.filter(c => c.status === 'New').length;
   const currentNav = navItems.find(n => n.id === active);
 
@@ -608,12 +686,12 @@ const AdminDashboard = () => {
       case 'pricing': return <PricingSection plans={pricing} setPlans={setPricing} />;
       case 'blog': return <BlogSection posts={blog} setPosts={setBlog} />;
       case 'testimonials': return <TestimonialsSection items={testimonials} setItems={setTestimonials} />;
-      case 'settings': return <SettingsSection settings={siteSettings} setSettings={setSiteSettings} />;
+      case 'settings': return <SettingsSection settings={siteSettings} setSettings={setSiteSettings} isDark={isDark} setIsDark={setIsDark} />;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-950">
+    <div className={`flex min-h-screen bg-slate-100 dark:bg-slate-950 ${isDark ? 'dark' : ''}`}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />
@@ -627,7 +705,7 @@ const AdminDashboard = () => {
             <Zap className="text-white w-5 h-5" fill="currentColor" />
           </div>
           <div>
-            <p className="font-extrabold text-slate-900 dark:text-white leading-none">DevCraft</p>
+            <p className="font-extrabold text-slate-900 dark:text-white leading-none">Nusify</p>
             <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mt-0.5">Admin Panel</p>
           </div>
         </div>
@@ -672,6 +750,13 @@ const AdminDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsDark(!isDark)}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-indigo-400 transition-colors"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <button className="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-blue-600 transition-colors">
               <Bell className="w-5 h-5" />
               {newClients > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />}
