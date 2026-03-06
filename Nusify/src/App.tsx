@@ -10,13 +10,14 @@ import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import WhatsAppWidget from "./components/WhatsAppWidget";
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Navbar />
-        <main className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="max-w-7xl mx-auto">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -30,6 +31,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <WhatsAppWidget />
       </div>
     </Router>
   );
