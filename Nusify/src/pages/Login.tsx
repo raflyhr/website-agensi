@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, Zap, ArrowRight, Chrome } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Zap, ArrowRight, Chrome, ArrowLeft } from 'lucide-react';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt with:', { email, password });
+    setError('');
+    // TODO: Replace with real backend auth
+    if (email === 'Nusify@admin.com' && password === 'Nusify03') {
+      navigate('/admin');
+    } else {
+      setError('Email or password is incorrect.');
+    }
   };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      {/* Back to Home Button */}
+      <Link to="/" className="fixed top-6 left-6 sm:top-10 sm:left-10 z-50 flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors duration-300 font-medium bg-white/50 dark:bg-slate-800/50 backdrop-blur-md px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-slate-200/50 dark:border-slate-700/50">
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm">Back to Home</span>
+      </Link>
+
       <div className="w-full max-w-md space-y-8 relative">
         {/* Background decorative elements */}
         <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob dark:bg-purple-900 dark:opacity-10"></div>
@@ -38,6 +51,12 @@ const Login = () => {
               Please enter your details to sign in.
             </p>
           </div>
+
+          {error && (
+            <div className="mt-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 text-sm font-medium text-red-600 dark:text-red-400">
+              {error}
+            </div>
+          )}
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">

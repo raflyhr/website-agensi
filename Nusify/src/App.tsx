@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -10,27 +10,38 @@ import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AdminDashboard from "./pages/AdminDashboard";
+
+function AppContent() {
+  const location = useLocation();
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" || location.pathname.startsWith("/admin");
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+      {!isAuthPage && <Navbar />}
+      <main className={`flex-grow ${!isAuthPage ? "pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" : "w-full"}`}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/portfolio" element={<Portofolio />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </main>
+      {!isAuthPage && <Footer />}
+    </div>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-        <Navbar />
-        <main className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/portfolio" element={<Portofolio />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AppContent />
     </Router>
   );
 }
