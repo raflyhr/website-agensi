@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { Menu, X, ChevronRight, Zap } from "lucide-react";
+import { Menu, X, ChevronRight, Zap, Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isDark = theme === "dark";
 
   // Handle scroll effect for glassmorphism and shadow
   useEffect(() => {
@@ -62,7 +65,7 @@ const Navbar = () => {
                   key={link.name}
                   to={link.path}
                   className={({ isActive }) =>
-                    `px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 relative group ${
+                    `px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 relative group ${
                       isActive
                         ? "text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm"
                         : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -75,8 +78,15 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Right Section: CTA Button */}
-          <div className="hidden md:block">
+          {/* Right Section: CTA Button & Theme Toggle */}
+          <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-blue-400 transition-all duration-300 hover:rotate-12 active:scale-90"
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <Link
               to="/login"
               className="relative inline-flex items-center justify-center px-7 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-gradient-to-br from-brand-blue to-brand-purple rounded-full group hover:shadow-2xl hover:shadow-blue-500/30 active:scale-95"
@@ -91,7 +101,13 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Trigger */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-all duration-200"
@@ -131,7 +147,14 @@ const Navbar = () => {
               {link.name}
             </NavLink>
           ))}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center justify-between w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
+            >
+              <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+              {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-blue-500" />}
+            </button>
             <Link
               to="/login"
               onClick={() => setIsMobileMenuOpen(false)}
