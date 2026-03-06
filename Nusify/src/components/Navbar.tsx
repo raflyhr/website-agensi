@@ -79,7 +79,7 @@ const Navbar = () => {
           {/* Right Section: CTA Button */}
           <div className="hidden md:block">
             <Link
-              to="/contact"
+              to="/login"
               className="relative inline-flex items-center justify-center px-7 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-gradient-to-br from-brand-blue to-brand-purple rounded-full group hover:shadow-2xl hover:shadow-blue-500/30 active:scale-95"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-blue to-brand-purple"></span>
@@ -134,7 +134,7 @@ const Navbar = () => {
           ))}
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
             <Link
-              to="/contact"
+              to="/login"
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg"
             >
