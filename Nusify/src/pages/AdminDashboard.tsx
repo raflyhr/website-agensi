@@ -265,6 +265,17 @@ const PortfolioSection = ({ items, setItems }: { items: Portfolio[]; setItems: (
   };
   const del = (id: number) => setItems(items.filter(i => i.id !== id));
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm({ ...form, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div>
       <SectionHeader title="Portfolio" subtitle={`${items.length} project terdaftar`} onAdd={openAdd} addLabel="Tambah Portfolio" />
@@ -294,7 +305,17 @@ const PortfolioSection = ({ items, setItems }: { items: Portfolio[]; setItems: (
           <Field label="Nama Project"><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className={inputCls} placeholder="Nama project" /></Field>
           <Field label="Deskripsi"><textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className={inputCls} rows={3} placeholder="Deskripsi singkat" /></Field>
           <Field label="Link Website"><input value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} className={inputCls} placeholder="https://..." /></Field>
-          <Field label="URL Gambar"><input value={form.image} onChange={e => setForm({ ...form, image: e.target.value })} className={inputCls} placeholder="https://..." /></Field>
+          <Field label="Tambah Gambar">
+            <input type="file" accept="image/*" onChange={handleImageUpload} className={inputCls} />
+            {form.image && (
+              <div className="mt-3 relative aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+                <button onClick={() => setForm({ ...form, image: '' })} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg shadow-lg hover:bg-red-600 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </Field>
           <Field label="Tech Stack"><input value={form.tech} onChange={e => setForm({ ...form, tech: e.target.value })} className={inputCls} placeholder="React, Tailwind, ..." /></Field>
           <div className="flex gap-3 mt-2">
             <button onClick={() => setOpen(false)} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
