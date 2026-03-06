@@ -20,7 +20,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       {!isAuthPage && <Navbar />}
-      <main className={`flex-grow ${!isAuthPage ? "pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" : "w-full"}`}>
+      <main className={`flex-grow ${!isAuthPage ? "w-full overflow-x-hidden" : "w-full"}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
