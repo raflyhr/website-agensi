@@ -3,10 +3,27 @@
 @theme {
   --color-brand-blue: #3b82f6;
   --color-brand-purple: #8b5cf6;
+  
+  --animation-float: float 6s ease-in-out infinite;
+  --animation-bounce-slow: bounce-slow 4s ease-in-out infinite;
+  --animation-fade-in: fade-in 1s ease-out forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 :root {
-  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

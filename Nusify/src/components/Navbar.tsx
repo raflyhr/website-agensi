@@ -16,7 +16,6 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
     { name: "Portfolio", path: "/portfolio" },
@@ -35,7 +34,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          {/* Left Section: Modern Tech Logo */}
+          {/* Left Section: Nusify Logo (Home Button) */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
@@ -46,7 +45,7 @@ const Navbar = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">
-                  DevCraft
+                  Nusify
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 mt-1">
                   Studio
@@ -55,7 +54,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center Section: Desktop Navigation */}
+          {/* Center Section: Desktop Navigation (No Home Link) */}
           <div className="hidden md:flex items-center bg-slate-100/50 dark:bg-slate-800/30 px-6 py-2 rounded-full border border-slate-200/50 dark:border-slate-700/30 backdrop-blur-sm">
             <div className="flex items-center space-x-1">
               {navLinks.map((link) => (

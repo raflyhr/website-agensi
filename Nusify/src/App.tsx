@@ -11,6 +11,7 @@ import Blog from "./pages/Blog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import WhatsAppWidget from "./components/WhatsAppWidget";
 
 function AppContent() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function AppContent() {
         </Routes>
       </main>
       {!isAuthPage && <Footer />}
+      {!isAuthPage && <WhatsAppWidget />}
     </div>
   );
 }
