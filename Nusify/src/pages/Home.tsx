@@ -3,6 +3,9 @@ import { Rocket, Code, Layout, Cpu, MessageCircle } from "lucide-react";
 import DigitalEraSection from "../components/DigitalEraSection";
 import ProblemAwarenessSection from "../components/ProblemAwarenessSection";
 import BenefitSection from "../components/BenefitSection";
+import PortfolioPreviewSection from "../components/PortfolioPreviewSection";
+import ServicesSection from "../components/ServicesSection";
+import ServiceFeatures from "../components/ServiceFeatures";
 
 const Home = () => {
   return (
@@ -155,6 +158,15 @@ const Home = () => {
 
       {/* Benefit Section */}
       <BenefitSection />
+
+      {/* Portfolio Section */}
+      <PortfolioPreviewSection />
+
+      {/* Services Section */}
+      <ServicesSection />
+
+      {/* Service Features Section */}
+      <ServiceFeatures />
     </div>
   );
 };
