@@ -69,9 +69,9 @@ const initTestimonials: Testimonial[] = [
   { id: 3, name: 'Ahmad Fauzi', company: 'Toko Sejahtera', review: 'E-commerce kami kini berjalan lancar. Sangat puas dengan pelayanannya.', rating: 4 },
 ];
 const initSettings: SiteSettings = {
-  logo: '/logo.png', email: 'hello@devcraft.id', phone: '+62 812 3456 7890',
+  logo: '/logo.png', email: 'hello@nusify.id', phone: '+62 812 3456 7890',
   address: 'Jl. Jenderal Sudirman No.10, Jakarta 10220',
-  instagram: 'devcraft.id', twitter: 'devcraftid', facebook: 'devcraft.id', youtube: 'devcraft',
+  instagram: 'nusify.id', twitter: 'nusifyid', facebook: 'nusify.id', youtube: 'nusify',
 };
 
 // ─────────────── SHARED COMPONENTS ───────────────
@@ -684,7 +684,7 @@ const AdminDashboard = () => {
             <Zap className="text-white w-5 h-5" fill="currentColor" />
           </div>
           <div>
-            <p className="font-extrabold text-slate-900 dark:text-white leading-none">DevCraft</p>
+            <p className="font-extrabold text-slate-900 dark:text-white leading-none">Nusify</p>
             <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mt-0.5">Admin Panel</p>
           </div>
         </div>
