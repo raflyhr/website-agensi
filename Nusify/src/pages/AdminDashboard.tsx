@@ -120,6 +120,53 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 
 const inputCls = "w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-sm";
 
+const LineChart = ({ data, color }: { data: number[], color: string }) => {
+  const max = Math.max(...data);
+  const width = 300;
+  const height = 100;
+  const points = data.map((val, i) => {
+    const x = (i / (data.length - 1)) * width;
+    const y = height - (val / max) * height;
+    return `${x},${y}`;
+  }).join(' ');
+
+  return (
+    <div className="w-full h-32 px-2 py-4">
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
+        <defs>
+          <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d={`M ${points} L ${width},${height} L 0,${height} Z`}
+          fill="url(#lineGradient)"
+        />
+        <polyline
+          fill="none"
+          stroke={color}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={points}
+          className="transition-all duration-1000 ease-out"
+          style={{ strokeDasharray: 1000, strokeDashoffset: 0 }}
+        />
+        {data.map((val, i) => {
+          const x = (i / (data.length - 1)) * width;
+          const y = height - (val / max) * height;
+          return (
+            <circle key={i} cx={x} cy={y} r="4" fill="white" stroke={color} strokeWidth="2" className="cursor-pointer">
+              <title>{val}</title>
+            </circle>
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
+
 // ─────────────── SECTIONS ───────────────
 
 // Dashboard Overview
@@ -136,36 +183,70 @@ const DashboardOverview = ({ clients, portfolio, posts }: { clients: Client[]; p
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map(({ label, value, change, icon: Icon, color }) => (
           <div key={label} className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg shrink-0`}>
+            <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${color} flex items-center justify-center shadow-lg shrink-0`}>
               <Icon className="text-white w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{label}</p>
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{label}</p>
               <p className="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">{value}</p>
               <p className="text-xs font-semibold text-emerald-500 flex items-center gap-1 mt-0.5"><TrendingUp className="w-3 h-3" /> {change}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
-        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <h2 className="text-base font-extrabold text-slate-900 dark:text-white">Recent Client Requests</h2>
-        </div>
-        <div className="divide-y divide-slate-100 dark:divide-slate-800">
-          {recent.map(c => (
-            <div key={c.id} className="flex items-center gap-4 px-5 py-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold shrink-0">
-                {c.name.charAt(0)}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-5">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-base font-extrabold text-slate-900 dark:text-white">Visitor Overview</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Total visitors this week</p>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{c.name}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{c.type} · {c.budget}</p>
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-full"><Eye className="w-3 h-3" /> 2.4k total</span>
               </div>
-              <Badge status={c.status} />
             </div>
-          ))}
+            <LineChart data={[400, 800, 600, 1200, 950, 1500, 1300]} color="#3b82f6" />
+            <div className="flex items-center justify-between mt-4 px-2">
+              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                <span key={day} className="text-[10px] font-bold text-slate-400 uppercase">{day}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <h2 className="text-base font-extrabold text-slate-900 dark:text-white">Recent Client Requests</h2>
+              <button className="text-xs font-bold text-blue-600 hover:text-blue-700">View All</button>
+            </div>
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+              {recent.map(c => (
+                <div key={c.id} className="flex items-center gap-4 px-5 py-4">
+                  <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold shrink-0">
+                    {c.name.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{c.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{c.type} · {c.budget}</p>
+                  </div>
+                  <Badge status={c.status} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl shadow-blue-500/20">
+            <p className="text-xs font-bold text-blue-100 uppercase tracking-widest mb-2">Pro Tip</p>
+            <h3 className="text-lg font-extrabold mb-3">Optimize your conversion</h3>
+            <p className="text-sm text-blue-50 mb-4 opacity-80 leading-relaxed">Client requests are up by 15% this week. Make sure to respond to "New" status requests within 24 hours.</p>
+            <button className="w-full bg-white text-blue-600 py-2.5 rounded-xl font-bold text-sm shadow-lg hover:bg-blue-50 transition-colors">Improve Response Time</button>
+          </div>
         </div>
       </div>
+
       <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4">
         <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">
           ⚠️ <strong>Frontend Prototype:</strong> Data ini menggunakan mock data lokal. Integrasi backend akan dilakukan setelah API siap.
@@ -558,6 +639,44 @@ const TestimonialsSection = ({ items, setItems }: { items: Testimonial[]; setIte
   );
 };
 
+// Analytics Section
+const AnalyticsSection = () => {
+  return (
+    <div className="space-y-6">
+      <SectionHeader title="Dashboard Analytics" subtitle="Statistik performa website dan konversi client" />
+
+      <div className="grid grid-cols-1 gap-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
+          <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-6">Client Response Trend</h3>
+          <div className="h-64">
+            <LineChart data={[2, 5, 3, 9, 6, 12, 10, 15, 11, 18]} color="#8b5cf6" />
+          </div>
+          <div className="flex items-center justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { label: 'Conversion Rate', val: '12.4%', sub: '+2.1% from last month', icon: TrendingUp, color: 'text-emerald-500' },
+          { label: 'Avg Project Budget', val: 'Rp 4.2M', sub: 'Based on last 10 deals', icon: Briefcase, color: 'text-blue-500' },
+          { label: 'User Retention', val: '88%', sub: 'Returning visitors', icon: Users, color: 'text-purple-500' },
+        ].map(card => (
+          <div key={card.label} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 leading-none">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{card.label}</p>
+              <card.icon className={`w-5 h-5 ${card.color}`} />
+            </div>
+            <p className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">{card.val}</p>
+            <p className="text-xs font-semibold text-slate-400">{card.sub}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // Settings
 const SettingsSection = ({
   settings, setSettings, isDark, setIsDark,
@@ -635,10 +754,11 @@ const SettingsSection = ({
 };
 
 // ─────────────── MAIN DASHBOARD ───────────────
-type Section = 'dashboard' | 'clients' | 'portfolio' | 'services' | 'pricing' | 'blog' | 'testimonials' | 'settings';
+type Section = 'dashboard' | 'analytics' | 'clients' | 'portfolio' | 'services' | 'pricing' | 'blog' | 'testimonials' | 'settings';
 
 const navItems: { id: Section; label: string; icon: React.FC<{ className?: string }> }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'analytics', label: 'Analytics', icon: TrendingUp },
   { id: 'clients', label: 'Client Requests', icon: Users },
   { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
   { id: 'services', label: 'Services', icon: Tag },
@@ -680,6 +800,7 @@ const AdminDashboard = () => {
   const renderSection = () => {
     switch (active) {
       case 'dashboard': return <DashboardOverview clients={clients} portfolio={portfolio} posts={blog} />;
+      case 'analytics': return <AnalyticsSection />;
       case 'clients': return <ClientRequests clients={clients} setClients={setClients} />;
       case 'portfolio': return <PortfolioSection items={portfolio} setItems={setPortfolio} />;
       case 'services': return <ServicesSection items={services} setItems={setServices} />;
