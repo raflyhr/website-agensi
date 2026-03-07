@@ -122,47 +122,92 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 const inputCls = "w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-sm";
 
 const LineChart = ({ data, color }: { data: number[], color: string }) => {
-  const max = Math.max(...data);
-  const width = 300;
-  const height = 100;
-  const points = data.map((val, i) => {
-    const x = (i / (data.length - 1)) * width;
-    const y = height - (val / max) * height;
-    return `${x},${y}`;
-  }).join(' ');
+  const max = Math.max(...data, 1);
+  const chartMax = Math.ceil(max * 1.2 / 5) * 5; // Nice rounded max with 20% padding
+  const width = 400;
+  const height = 150;
+  const padding = 20;
+  
+  const getX = (i: number) => (i / (data.length - 1)) * (width - padding * 2) + padding;
+  const getY = (val: number) => height - padding - (val / chartMax) * (height - padding * 2);
+
+  // Generate cubic bezier path
+  let pathD = `M ${getX(0)},${getY(data[0])}`;
+  for (let i = 0; i < data.length - 1; i++) {
+    const x1 = getX(i);
+    const y1 = getY(data[i]);
+    const x2 = getX(i + 1);
+    const y2 = getY(data[i + 1]);
+    const cx = (x1 + x2) / 2;
+    pathD += ` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+  }
+
+  const fillD = `${pathD} L ${getX(data.length - 1)},${height - padding} L ${getX(0)},${height - padding} Z`;
 
   return (
-    <div className="w-full h-32 px-2 py-4">
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
+    <div className="w-full h-full">
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
         <defs>
-          <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <linearGradient id={`gradient-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.2" />
             <stop offset="100%" stopColor={color} stopOpacity="0" />
           </linearGradient>
         </defs>
+
+        {/* Grid Lines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((p, i) => (
+          <line
+            key={i}
+            x1={padding}
+            y1={getY(chartMax * p)}
+            x2={width - padding}
+            y2={getY(chartMax * p)}
+            stroke="currentColor"
+            className="text-slate-100 dark:text-slate-800"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+          />
+        ))}
+
+        {/* Area Fill */}
+        <path d={fillD} fill={`url(#gradient-${color.replace('#', '')})`} />
+
+        {/* Line Path */}
         <path
-          d={`M ${points} L ${width},${height} L 0,${height} Z`}
-          fill="url(#lineGradient)"
-        />
-        <polyline
+          d={pathD}
           fill="none"
           stroke={color}
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
-          points={points}
-          className="transition-all duration-1000 ease-out"
-          style={{ strokeDasharray: 1000, strokeDashoffset: 0 }}
         />
-        {data.map((val, i) => {
-          const x = (i / (data.length - 1)) * width;
-          const y = height - (val / max) * height;
-          return (
-            <circle key={i} cx={x} cy={y} r="4" fill="white" stroke={color} strokeWidth="2" className="cursor-pointer">
-              <title>{val}</title>
-            </circle>
-          );
-        })}
+
+        {/* Data Points */}
+        {data.map((val, i) => (
+          <g key={i} className="group/point">
+            <circle
+              cx={getX(i)}
+              cy={getY(val)}
+              r="4"
+              fill="white"
+              stroke={color}
+              strokeWidth="2.5"
+              className="transition-all duration-200 group-hover/point:r-6 cursor-pointer"
+            />
+            {/* Tooltip background on hover */}
+            <rect 
+              x={getX(i) - 15} y={getY(val) - 30} width="30" height="20" rx="4"
+              className="fill-slate-900 opacity-0 group-hover/point:opacity-100 transition-opacity"
+            />
+            <text 
+              x={getX(i)} y={getY(val) - 16} 
+              className="text-[10px] font-bold fill-white text-center opacity-0 group-hover/point:opacity-100 transition-opacity"
+              textAnchor="middle"
+            >
+              {val}
+            </text>
+          </g>
+        ))}
       </svg>
     </div>
   );

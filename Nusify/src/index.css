@@ -55,3 +55,38 @@ body {
     background-color: #ffffff;
   }
 }
+
+/* Page Layout Utilities */
+.page-container {
+  @apply min-h-screen pt-32 pb-20 px-6 lg:px-8 max-w-7xl mx-auto w-full relative overflow-hidden;
+}
+
+.page-header {
+  @apply mb-12 text-center relative z-10;
+}
+
+.page-header h1 {
+  @apply text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white mb-4;
+}
+
+.page-header p {
+  @apply text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto;
+}
+
+/* Premium Card Styles */
+.premium-card {
+  @apply bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden;
+}
+
+.glass-card {
+  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 rounded-[2.5rem] shadow-2xl;
+}
+
+/* Ornament Backgrounds */
+.bg-ornament-blue {
+  @apply absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full -z-10;
+}
+
+.bg-ornament-purple {
+  @apply absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[120px] rounded-full -z-10;
+}
