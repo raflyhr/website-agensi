@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { X, MessageCircle, Send, Clock, User } from 'lucide-react';
+import { useState } from "react";
+import { X, MessageCircle, Send, Clock, User } from "lucide-react";
 
 const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const whatsappNumber = "6288980840381";
-  const prefilledMessage = "Halo Nusify, saya ingin konsultasi pembuatan website.";
+  const whatsappNumber = "6282373336946";
+  const prefilledMessage =
+    "Halo Nusify, saya ingin konsultasi pembuatan website.";
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(prefilledMessage)}`;
 
   return (
@@ -13,9 +14,9 @@ const WhatsAppWidget = () => {
       {/* Chat Popup Card */}
       <div
         className={`mb-4 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all duration-500 ease-in-out transform ${
-          isOpen 
-            ? 'opacity-100 translate-y-0 scale-100' 
-            : 'opacity-0 translate-y-10 scale-90 pointer-events-none'
+          isOpen
+            ? "opacity-100 translate-y-0 scale-100"
+            : "opacity-0 translate-y-10 scale-90 pointer-events-none"
         }`}
       >
         {/* Header */}
@@ -26,10 +27,12 @@ const WhatsAppWidget = () => {
             </div>
             <div>
               <h3 className="font-bold text-lg">WhatsApp</h3>
-              <p className="text-xs text-emerald-100">Official Nusify Support</p>
+              <p className="text-xs text-emerald-100">
+                Official Nusify Support
+              </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-black/10 rounded-full transition-colors text-white/80 hover:text-white"
           >
@@ -48,7 +51,9 @@ const WhatsAppWidget = () => {
                 Ingin berkonsultasi untuk rencana pembuatan website Anda?
               </p>
               <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-2 font-medium">
-                Tekan tombol <span className="text-emerald-600 font-bold">Chat Now</span> di bawah untuk terhubung dengan tim konsultan kami.
+                Tekan tombol{" "}
+                <span className="text-emerald-600 font-bold">Chat Now</span> di
+                bawah untuk terhubung dengan tim konsultan kami.
               </p>
               {/* Message tail */}
               <div className="absolute top-0 -left-2 w-0 h-0 border-t-[10px] border-t-slate-100 dark:border-t-slate-800 border-l-[10px] border-l-transparent"></div>
@@ -79,9 +84,9 @@ const WhatsAppWidget = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`group relative w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 transform hover:scale-110 active:scale-90 ${
-          isOpen 
-            ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 rotate-90' 
-            : 'bg-emerald-600 text-white'
+          isOpen
+            ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 rotate-90"
+            : "bg-emerald-600 text-white"
         }`}
       >
         {isOpen ? (

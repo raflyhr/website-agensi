@@ -6,6 +6,11 @@ import BenefitSection from "../components/BenefitSection";
 import PortfolioPreviewSection from "../components/PortfolioPreviewSection";
 import ServicesSection from "../components/ServicesSection";
 import ServiceFeatures from "../components/ServiceFeatures";
+import VideoTestimonialSection from "../components/VideoTestimonialSection";
+import GoogleReviewsSection from "../components/GoogleReviewsSection";
+import FAQSection from "../components/FAQSection";
+import ProcessSection from "../components/ProcessSection";
+import FinalCTASection from "../components/FinalCTASection";
 
 const Home = () => {
   return (
@@ -167,6 +172,21 @@ const Home = () => {
 
       {/* Service Features Section */}
       <ServiceFeatures />
+
+      {/* Video Testimonial Section */}
+      <VideoTestimonialSection />
+
+      {/* Google Reviews & Location Section */}
+      <GoogleReviewsSection />
+
+      {/* FAQ Section */}
+      <FAQSection />
+
+      {/* Process Section */}
+      <ProcessSection />
+
+      {/* Final CTA Section */}
+      <FinalCTASection />
     </div>
   );
 };

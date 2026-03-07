@@ -1,13 +1,68 @@
 import { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
-import { Menu, X, ChevronRight, Zap, Sun, Moon } from "lucide-react";
+import { NavLink, Link, useLocation } from "react-router-dom";
+import {
+  Menu,
+  X,
+  ChevronRight,
+  Zap,
+  Sun,
+  Moon,
+  ChevronDown,
+} from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [aboutTimeout, setAboutTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [servicesTimeout, setServicesTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  );
   const isDark = theme === "dark";
+
+  // Handle About dropdown hover logic
+  const handleAboutMouseEnter = () => {
+    if (aboutTimeout) clearTimeout(aboutTimeout);
+    setIsAboutDropdownOpen(true);
+  };
+
+  const handleAboutMouseLeave = () => {
+    const timeout = setTimeout(() => setIsAboutDropdownOpen(false), 300);
+    setAboutTimeout(timeout);
+  };
+
+  // Handle Services dropdown hover logic
+  const handleServicesMouseEnter = () => {
+    if (servicesTimeout) clearTimeout(servicesTimeout);
+    setIsServicesDropdownOpen(true);
+  };
+
+  const handleServicesMouseLeave = () => {
+    const timeout = setTimeout(() => setIsServicesDropdownOpen(false), 300);
+    setServicesTimeout(timeout);
+  };
+
+  // Function to handle scroll to section
+  const scrollToSection = (sectionId: string) => {
+    setIsMobileMenuOpen(false);
+    setIsAboutDropdownOpen(false);
+
+    // If we are on home page, scroll directly
+    if (location.pathname === "/") {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // If not on home page, we would normally redirect to home with hash
+      // But for now let's just use window.location
+      window.location.href = `/#${sectionId}`;
+    }
+  };
 
   // Handle scroll effect for glassmorphism and shadow
   useEffect(() => {
@@ -19,12 +74,26 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
     { name: "Portfolio", path: "/portfolio" },
-    { name: "Pricing", path: "/pricing" },
-    { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" },
+  ];
+
+  const serviceItems = [
+    {
+      title: "Company",
+      description: "Company profile website for businesses.",
+      path: "/services/company",
+    },
+    {
+      title: "Online Shop",
+      description: "Full-featured e-commerce website solution.",
+      path: "/services/online-shop",
+    },
+    {
+      title: "Redesign",
+      description: "Modern redesign for outdated websites.",
+      path: "/services/redesign",
+    },
   ];
 
   return (
@@ -57,9 +126,99 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center Section: Desktop Navigation (No Home Link) */}
+          {/* Center Section: Desktop Navigation */}
           <div className="hidden md:flex items-center bg-slate-100/50 dark:bg-slate-800/30 px-6 py-2 rounded-full border border-slate-200/50 dark:border-slate-700/30 backdrop-blur-sm">
             <div className="flex items-center space-x-1">
+              {/* About Dropdown */}
+              <div
+                className="relative h-full flex items-center"
+                onMouseEnter={handleAboutMouseEnter}
+                onMouseLeave={handleAboutMouseLeave}
+              >
+                <button
+                  className={`flex items-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    isAboutDropdownOpen
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-slate-700/50"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  About
+                  <ChevronDown
+                    className={`ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${isAboutDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {/* About Dropdown Menu Container with Hover Bridge */}
+                <div
+                  className={`absolute top-full left-0 pt-4 w-48 transition-all duration-300 transform origin-top ${
+                    isAboutDropdownOpen
+                      ? "opacity-100 scale-100 translate-y-0 visible"
+                      : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
+                  }`}
+                >
+                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-2 space-y-1">
+                    <button
+                      onClick={() => scrollToSection("testimonials")}
+                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                    >
+                      Testimonials
+                    </button>
+                    <button
+                      onClick={() => scrollToSection("faq")}
+                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                    >
+                      FAQ
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Services Dropdown */}
+              <div
+                className="relative h-full flex items-center"
+                onMouseEnter={handleServicesMouseEnter}
+                onMouseLeave={handleServicesMouseLeave}
+              >
+                <button
+                  className={`flex items-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    isServicesDropdownOpen
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-slate-700/50"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  Service
+                  <ChevronDown
+                    className={`ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${isServicesDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {/* Services Dropdown Menu */}
+                <div
+                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-300 transform origin-top ${
+                    isServicesDropdownOpen
+                      ? "opacity-100 scale-100 translate-y-0 visible"
+                      : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
+                  }`}
+                >
+                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-3 space-y-1">
+                    {serviceItems.map((service) => (
+                      <Link
+                        key={service.title}
+                        to={service.path}
+                        className="block w-full text-left p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all group"
+                      >
+                        <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                          {service.title}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                          {service.description}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {navLinks.map((link) => (
                 <NavLink
                   key={link.name}
@@ -85,7 +244,11 @@ const Navbar = () => {
               className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-blue-400 transition-all duration-300 hover:rotate-12 active:scale-90"
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDark ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
             </button>
             <Link
               to="/login"
@@ -106,7 +269,11 @@ const Navbar = () => {
               onClick={toggleTheme}
               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDark ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -131,6 +298,81 @@ const Navbar = () => {
         }`}
       >
         <div className="mx-4 mt-2 p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-2xl space-y-2">
+          {/* Mobile About with Submenu */}
+          <div className="space-y-1">
+            <button
+              onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
+              className={`w-full flex items-center justify-between px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
+                isAboutDropdownOpen
+                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              }`}
+            >
+              <span>About</span>
+              <ChevronDown
+                className={`w-5 h-5 transition-transform duration-300 ${isAboutDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            <div
+              className={`overflow-hidden transition-all duration-300 ${isAboutDropdownOpen ? "max-h-40 opacity-100 mb-2" : "max-h-0 opacity-0"}`}
+            >
+              <div className="pl-8 pr-4 py-2 space-y-1">
+                <button
+                  onClick={() => scrollToSection("testimonials")}
+                  className="w-full text-left px-5 py-3 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                >
+                  • Testimonials
+                </button>
+                <button
+                  onClick={() => scrollToSection("faq")}
+                  className="w-full text-left px-5 py-3 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                >
+                  • FAQ
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Services with Submenu */}
+          <div className="space-y-1">
+            <button
+              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+              className={`w-full flex items-center justify-between px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
+                isServicesDropdownOpen
+                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              }`}
+            >
+              <span>Service</span>
+              <ChevronDown
+                className={`w-5 h-5 transition-transform duration-300 ${isServicesDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            <div
+              className={`overflow-hidden transition-all duration-300 ${isServicesDropdownOpen ? "max-h-[400px] opacity-100 mb-2" : "max-h-0 opacity-0"}`}
+            >
+              <div className="pl-8 pr-4 py-2 space-y-1">
+                {serviceItems.map((service) => (
+                  <Link
+                    key={service.title}
+                    to={service.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block w-full text-left px-5 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                  >
+                    <div className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                      {service.title}
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                      {service.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
@@ -153,7 +395,11 @@ const Navbar = () => {
               className="flex items-center justify-between w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
             >
               <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
-              {isDark ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-blue-500" />}
+              {isDark ? (
+                <Sun className="w-5 h-5 text-amber-500" />
+              ) : (
+                <Moon className="w-5 h-5 text-blue-500" />
+              )}
             </button>
             <Link
               to="/login"
