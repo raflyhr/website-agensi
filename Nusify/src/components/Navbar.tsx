@@ -4,12 +4,12 @@ import {
   Menu,
   X,
   ChevronRight,
-  Zap,
   Sun,
   Moon,
   ChevronDown,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import logoImg from "../assets/Logo.png";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -103,28 +103,19 @@ const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled
           ? "bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg shadow-xl border-b border-white/20 dark:border-slate-800/50 py-3"
-          : "bg-transparent py-6"
+          : "bg-transparent py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Left Section: Nusify Logo (Home Button) */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="relative">
-                <div className="w-11 h-11 bg-gradient-to-br from-brand-blue via-indigo-600 to-brand-purple rounded-xl flex items-center justify-center transform group-hover:rotate-6 transition-all duration-300 shadow-lg shadow-blue-500/20">
-                  <Zap className="text-white w-6 h-6" fill="currentColor" />
-                </div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-brand-blue to-brand-purple rounded-xl blur opacity-0 group-hover:opacity-30 transition duration-300"></div>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">
-                  Nusify
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 mt-1">
-                  Studio
-                </span>
-              </div>
+          <div className="flex-shrink-0 relative w-32 h-10"> 
+            <Link to="/" className="absolute top-1/2 -translate-y-1/2 -left-10 -bottom-10 flex items-center group">
+              <img 
+                src={logoImg} 
+                alt="Nusify Logo" 
+                className="h-[200px] w-auto max-w-none transform group-hover:scale-105 transition-all duration-300 drop-shadow-lg" 
+              />
             </Link>
           </div>
 
