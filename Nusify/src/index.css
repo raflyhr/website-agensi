@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-blue: #3b82f6;
+  --color-brand-purple: #8b5cf6;
+  
+  --animation-float: float 6s ease-in-out infinite;
+  --animation-bounce-slow: bounce-slow 4s ease-in-out infinite;
+  --animation-fade-in: fade-in 1s ease-out forwards;
+  --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
+  --animation-pulse-shadow: pulseShadow 2.8s infinite;
+  --animation-shine: shine 600ms ease-out forwards;
+  --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
+  --animation-pulse-shadow: pulseShadow 2.8s infinite;
+  --animation-shine: shine 600ms ease-out forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  --animation-shimmer: shimmer 2s infinite;
+
+  @keyframes floatingSupportIcon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  
+  @keyframes pulseShadow {
+    0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(30, 64, 175, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0); }
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes floatingSupportIcon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  
+  @keyframes pulseShadow {
+    0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(30, 64, 175, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0); }
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+/* Page Layout Utilities */
+.page-container {
+  @apply min-h-screen pt-32 pb-20 px-6 lg:px-8 max-w-7xl mx-auto w-full relative overflow-hidden;
+}
+
+.page-header {
+  @apply mb-12 text-center relative z-10;
+}
+
+.page-header h1 {
+  @apply text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white mb-4;
+}
+
+.page-header p {
+  @apply text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto;
+}
+
+/* Premium Card Styles */
+.premium-card {
+  @apply bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden;
+}
+
+.glass-card {
+  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 rounded-[2.5rem] shadow-2xl;
+}
+
+/* Ornament Backgrounds */
+.bg-ornament-blue {
+  @apply absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full -z-10;
+}
+
+.bg-ornament-purple {
+  @apply absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[120px] rounded-full -z-10;
+}

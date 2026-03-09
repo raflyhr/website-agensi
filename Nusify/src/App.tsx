@@ -1,0 +1,67 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Portofolio from "./pages/Portofolio";
+import Pricing from "./pages/Pricing";
+import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AdminDashboard from "./pages/AdminDashboard";
+import OnlineShop from "./pages/services/OnlineShop";
+import WhatsAppWidget from "./components/WhatsAppWidget";
+
+function AppContent() {
+  const location = useLocation();
+  const isAuthPage =
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname.startsWith("/admin");
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+      {!isAuthPage && <Navbar />}
+      <main
+        className={`flex-grow ${!isAuthPage ? "w-full overflow-x-hidden" : "w-full"}`}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/portfolio" element={<Portofolio />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services/online-shop" element={<OnlineShop />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </main>
+      {!isAuthPage && <Footer />}
+      {!isAuthPage && <WhatsAppWidget />}
+    </div>
+  );
+}
+
+import { ThemeProvider } from "./context/ThemeContext";
+
+function App() {
+  return (
+    <ThemeProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
+  );
+}
+
+export default App;
