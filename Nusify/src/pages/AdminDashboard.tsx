@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Briefcase, Settings, LogOut,
@@ -7,7 +7,7 @@ import {
   Globe, Instagram, Twitter, Facebook, Youtube, Phone, Mail,
   Sun, Moon,
 } from 'lucide-react';
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../context/theme-core";
 
 // ─────────────── TYPES ───────────────
 type ClientStatus = 'New' | 'Contacted' | 'In Progress' | 'Completed';
@@ -26,7 +26,7 @@ interface PricingPlan {
   id: number; name: string; price: string; features: string[];
 }
 interface BlogPost {
-  id: number; title: string; category: string; date: string; excerpt: string; image?: string;
+  id: number; title: string; category: string; date: string; excerpt: string;
 }
 interface Testimonial {
   id: number; name: string; company: string; review: string; rating: number;
@@ -577,26 +577,15 @@ const PricingSection = ({ plans, setPlans }: { plans: PricingPlan[]; setPlans: (
 // Blog
 const BlogSection = ({ posts, setPosts }: { posts: BlogPost[]; setPosts: (p: BlogPost[]) => void }) => {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<Omit<BlogPost, 'id'>>({ title: '', category: '', date: '', excerpt: '', image: '' });
+  const [form, setForm] = useState<Omit<BlogPost, 'id'>>({ title: '', category: '', date: '', excerpt: '' });
   const [editId, setEditId] = useState<number | null>(null);
 
-  const openAdd = () => { setForm({ title: '', category: '', date: new Date().toISOString().slice(0, 10), excerpt: '', image: '' }); setEditId(null); setOpen(true); };
-  const openEdit = (p: BlogPost) => { setForm({ title: p.title, category: p.category, date: p.date, excerpt: p.excerpt, image: p.image || '' }); setEditId(p.id); setOpen(true); };
+  const openAdd = () => { setForm({ title: '', category: '', date: new Date().toISOString().slice(0, 10), excerpt: '' }); setEditId(null); setOpen(true); };
+  const openEdit = (p: BlogPost) => { setForm({ title: p.title, category: p.category, date: p.date, excerpt: p.excerpt }); setEditId(p.id); setOpen(true); };
   const save = () => {
     if (editId !== null) setPosts(posts.map(p => p.id === editId ? { ...form, id: editId } : p));
     else setPosts([{ ...form, id: Date.now() }, ...posts]);
     setOpen(false);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm({ ...form, image: reader.result as string });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   return (
@@ -628,17 +617,6 @@ const BlogSection = ({ posts, setPosts }: { posts: BlogPost[]; setPosts: (p: Blo
           <Field label="Judul"><input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className={inputCls} placeholder="Judul artikel" /></Field>
           <Field label="Kategori"><input value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} className={inputCls} placeholder="Tutorial, Tips, Artikel" /></Field>
           <Field label="Tanggal"><input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} className={inputCls} /></Field>
-          <Field label="Thumbnail Blog">
-            <input type="file" accept="image/*" onChange={handleImageUpload} className={inputCls} />
-            {form.image && (
-              <div className="mt-3 relative aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
-                <button onClick={() => setForm({ ...form, image: '' })} className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg shadow-lg hover:bg-red-600 transition-colors">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </Field>
           <Field label="Ringkasan (Excerpt)"><textarea value={form.excerpt} onChange={e => setForm({ ...form, excerpt: e.target.value })} className={inputCls} rows={3} placeholder="Ringkasan singkat artikel..." /></Field>
           <div className="flex gap-3 mt-2">
             <button onClick={() => setOpen(false)} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Batal</button>
@@ -837,7 +815,7 @@ const navItems: { id: Section; label: string; icon: React.FC<{ className?: strin
 ];
 
 const AdminDashboard = () => {
-  const { theme, toggleTheme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const isDark = theme === 'dark';
   const setIsDark = (v: boolean) => setTheme(v ? 'dark' : 'light');
 

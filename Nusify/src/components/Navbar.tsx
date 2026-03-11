@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Menu,
   X,
-  ChevronRight,
   Sun,
   Moon,
   ChevronDown,
+  Star,
+  HelpCircle,
 } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
-import logoImg from "../assets/Logo.png";
+import { useTheme } from "../context/theme-core";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -18,11 +18,18 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const [aboutTimeout, setAboutTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [servicesTimeout, setServicesTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  );
+  const [aboutTimeout, setAboutTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+  const [servicesTimeout, setServicesTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
   const isDark = theme === "dark";
+
+  // Helper to check if a path is active
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path);
+  };
 
   // Handle About dropdown hover logic
   const handleAboutMouseEnter = () => {
@@ -82,326 +89,261 @@ const Navbar = () => {
 
   const serviceItems = [
     {
-      title: "Company",
-      description: "Company profile website for businesses.",
-      path: "/services/company",
+      title: "Online Shop Website",
+      description:
+        "Bangun toko online profesional yang siap meningkatkan penjualan dan kepercayaan pelanggan.",
+      path: "/service/online-shop",
+      icon: "🛍️",
     },
     {
-      title: "Online Shop",
-      description: "Full-featured e-commerce website solution.",
-      path: "/services/online-shop",
-    },
-    {
-      title: "Redesign",
-      description: "Modern redesign for outdated websites.",
+      title: "Website Redesign",
+      description:
+        "Perbarui tampilan website lama Anda menjadi lebih modern, cepat, dan profesional.",
       path: "/services/redesign",
+      icon: "✨",
     },
   ];
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
         isScrolled
-          ? "bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg shadow-xl border-b border-white/20 dark:border-slate-800/50 py-3"
-          : "bg-transparent py-4"
+          ? "bg-[#020617]/80 backdrop-blur-xl border-white/10 shadow-lg shadow-blue-900/5"
+          : "bg-transparent border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Left Section: Nusify Logo (Home Button) */}
-          <div className="flex-shrink-0 relative w-32 h-10"> 
-            <Link to="/" className="absolute top-1/2 -translate-y-1/2 -left-10 -bottom-10 flex items-center group">
-              <img 
-                src={logoImg} 
-                alt="Nusify Logo" 
-                className="h-[200px] w-auto max-w-none transform group-hover:scale-105 transition-all duration-300 drop-shadow-lg" 
-              />
-            </Link>
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-600/20 group-hover:scale-105 transition-transform duration-300">
+            N
           </div>
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+            Nusify Studio
+          </span>
+        </Link>
 
-          {/* Center Section: Desktop Navigation */}
-          <div className="hidden md:flex items-center bg-slate-100/50 dark:bg-slate-800/30 px-6 py-2 rounded-full border border-slate-200/50 dark:border-slate-700/30 backdrop-blur-sm">
-            <div className="flex items-center space-x-1">
-              {/* About Dropdown */}
-              <div
-                className="relative h-full flex items-center"
-                onMouseEnter={handleAboutMouseEnter}
-                onMouseLeave={handleAboutMouseLeave}
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8">
+          {/* About Dropdown Trigger */}
+          <div
+            className="relative group h-20 flex items-center"
+            onMouseEnter={handleAboutMouseEnter}
+            onMouseLeave={handleAboutMouseLeave}
+          >
+            <button className="flex items-center gap-1 text-sm font-medium transition-all duration-300 relative group-hover:-translate-y-0.5">
+              <span
+                className={`${
+                  isActive("/about")
+                    ? "text-white"
+                    : "text-slate-300 group-hover:text-white"
+                }`}
               >
-                <button
-                  className={`flex items-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    isAboutDropdownOpen
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-slate-700/50"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  About
-                  <ChevronDown
-                    className={`ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${isAboutDropdownOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-
-                {/* About Dropdown Menu Container with Hover Bridge */}
-                <div
-                  className={`absolute top-full left-0 pt-4 w-48 transition-all duration-300 transform origin-top ${
-                    isAboutDropdownOpen
-                      ? "opacity-100 scale-100 translate-y-0 visible"
-                      : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
-                  }`}
-                >
-                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-2 space-y-1">
-                    <button
-                      onClick={() => scrollToSection("testimonials")}
-                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
-                    >
-                      Testimonials
-                    </button>
-                    <button
-                      onClick={() => scrollToSection("faq")}
-                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
-                    >
-                      FAQ
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Services Dropdown */}
-              <div
-                className="relative h-full flex items-center"
-                onMouseEnter={handleServicesMouseEnter}
-                onMouseLeave={handleServicesMouseLeave}
-              >
-                <button
-                  className={`flex items-center px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    isServicesDropdownOpen
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-slate-700/50"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  Service
-                  <ChevronDown
-                    className={`ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${isServicesDropdownOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-
-                {/* Services Dropdown Menu */}
-                <div
-                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-300 transform origin-top ${
-                    isServicesDropdownOpen
-                      ? "opacity-100 scale-100 translate-y-0 visible"
-                      : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
-                  }`}
-                >
-                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-3 space-y-1">
-                    {serviceItems.map((service) => (
-                      <Link
-                        key={service.title}
-                        to={service.path}
-                        className="block w-full text-left p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all group"
-                      >
-                        <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                          {service.title}
-                        </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.name}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 relative group ${
-                      isActive
-                        ? "text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Section: CTA Button & Theme Toggle */}
-          <div className="hidden md:flex items-center gap-4">
-            <button
-              onClick={toggleTheme}
-              className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-blue-400 transition-all duration-300 hover:rotate-12 active:scale-90"
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            >
-              {isDark ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
-            <Link
-              to="/login"
-              className="relative inline-flex items-center justify-center px-7 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-gradient-to-br from-brand-blue to-brand-purple rounded-full group hover:shadow-2xl hover:shadow-blue-500/30 active:scale-95"
-            >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-blue to-brand-purple"></span>
-              <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
-              <span className="relative flex items-center gap-2">
-                Start Project
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                About
               </span>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Trigger */}
-          <div className="md:hidden flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
-            >
-              {isDark ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-all duration-200"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      <div
-        className={`md:hidden absolute top-full left-0 w-full transition-all duration-500 ease-in-out ${
-          isMobileMenuOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
-      >
-        <div className="mx-4 mt-2 p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-2xl space-y-2">
-          {/* Mobile About with Submenu */}
-          <div className="space-y-1">
-            <button
-              onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
-              className={`w-full flex items-center justify-between px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
-                isAboutDropdownOpen
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
-              }`}
-            >
-              <span>About</span>
               <ChevronDown
-                className={`w-5 h-5 transition-transform duration-300 ${isAboutDropdownOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  isAboutDropdownOpen ? "rotate-180" : ""
+                } ${
+                  isActive("/about")
+                    ? "text-white"
+                    : "text-slate-300 group-hover:text-white"
+                }`}
               />
+              <span
+                className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 translate-y-2 rounded-full ${
+                  isActive("/about")
+                    ? "w-full opacity-100"
+                    : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                }`}
+              ></span>
             </button>
 
+            {/* About Dropdown Menu */}
             <div
-              className={`overflow-hidden transition-all duration-300 ${isAboutDropdownOpen ? "max-h-40 opacity-100 mb-2" : "max-h-0 opacity-0"}`}
+              className={`absolute top-full left-0 pt-4 w-56 transition-all duration-300 transform origin-top ${
+                isAboutDropdownOpen
+                  ? "opacity-100 scale-100 translate-y-0 visible"
+                  : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
+              }`}
+              onMouseEnter={handleAboutMouseEnter}
+              onMouseLeave={handleAboutMouseLeave}
             >
-              <div className="pl-8 pr-4 py-2 space-y-1">
+              <div className="bg-[#020617] border border-white/10 rounded-2xl shadow-xl p-2 backdrop-blur-md">
                 <button
                   onClick={() => scrollToSection("testimonials")}
-                  className="w-full text-left px-5 py-3 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-white/5 transition-all group text-left"
                 >
-                  • Testimonials
+                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:text-blue-300 group-hover:translate-x-1 transition-all duration-300">
+                    <Star className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                    Testimonial
+                  </span>
                 </button>
                 <button
                   onClick={() => scrollToSection("faq")}
-                  className="w-full text-left px-5 py-3 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-white/5 transition-all group text-left"
                 >
-                  • FAQ
+                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 transition-all duration-300">
+                    <HelpCircle className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                    FAQ
+                  </span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Mobile Services with Submenu */}
-          <div className="space-y-1">
-            <button
-              onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
-              className={`w-full flex items-center justify-between px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
-                isServicesDropdownOpen
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
-              }`}
-            >
-              <span>Service</span>
+          {/* Service Dropdown Trigger */}
+          <div
+            className="relative group h-20 flex items-center"
+            onMouseEnter={handleServicesMouseEnter}
+            onMouseLeave={handleServicesMouseLeave}
+          >
+            <button className="flex items-center gap-1 text-sm font-medium transition-all duration-300 relative group-hover:-translate-y-0.5">
+              <span
+                className={`${
+                  isActive("/service") || isActive("/services")
+                    ? "text-white"
+                    : "text-slate-300 group-hover:text-white"
+                }`}
+              >
+                Services
+              </span>
               <ChevronDown
-                className={`w-5 h-5 transition-transform duration-300 ${isServicesDropdownOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  isServicesDropdownOpen ? "rotate-180" : ""
+                } ${
+                  isActive("/service") || isActive("/services")
+                    ? "text-white"
+                    : "text-slate-300 group-hover:text-white"
+                }`}
               />
+              <span
+                className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 translate-y-2 rounded-full ${
+                  isActive("/service") || isActive("/services")
+                    ? "w-full opacity-100"
+                    : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                }`}
+              ></span>
             </button>
 
+            {/* Services Dropdown Menu */}
             <div
-              className={`overflow-hidden transition-all duration-300 ${isServicesDropdownOpen ? "max-h-[400px] opacity-100 mb-2" : "max-h-0 opacity-0"}`}
+              className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[600px] transition-all duration-300 transform origin-top ${
+                isServicesDropdownOpen
+                  ? "opacity-100 scale-100 translate-y-0 visible"
+                  : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
+              }`}
+              onMouseEnter={handleServicesMouseEnter}
+              onMouseLeave={handleServicesMouseLeave}
             >
-              <div className="pl-8 pr-4 py-2 space-y-1">
-                {serviceItems.map((service) => (
-                  <Link
-                    key={service.title}
-                    to={service.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full text-left px-5 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
-                  >
-                    <div className="text-sm font-bold text-slate-700 dark:text-slate-300">
-                      {service.title}
-                    </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </Link>
-                ))}
+              <div className="bg-[#020617] border border-white/10 rounded-2xl shadow-xl p-2 backdrop-blur-md">
+                <div className="grid grid-cols-2 gap-2">
+                  {serviceItems.map((service) => (
+                    <Link
+                      key={service.title}
+                      to={service.path}
+                      className="group relative flex flex-col p-4 rounded-xl hover:bg-white/5 transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-2xl group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                          {service.icon}
+                        </span>
+                        <div className="text-base font-bold text-slate-200 group-hover:text-white transition-colors">
+                          {service.title}
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                        {service.description}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
+          {/* Nav Links */}
+          {navLinks
+            .filter((link) => link.path !== "/contact")
+            .map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`text-sm font-medium transition-all duration-300 relative group h-20 flex items-center hover:-translate-y-0.5 ${
+                  isActive(link.path)
+                    ? "text-white"
+                    : "text-slate-300 hover:text-white"
+                }`}
+              >
+                <span>{link.name}</span>
+                <span
+                  className={`absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300 translate-y-2 rounded-full ${
+                    isActive(link.path)
+                      ? "w-full opacity-100"
+                      : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                  }`}
+                ></span>
+              </Link>
+            ))}
+
+          {/* CTA Button */}
+          <Link
+            to="/contact"
+            className="px-6 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:scale-105 transition-all duration-300"
+          >
+            Konsultasi Sekarang
+          </Link>
+
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-slate-800/50 hover:bg-slate-700/50 text-slate-400 hover:text-white transition-colors backdrop-blur-sm"
+          >
+            {isDark ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+
+        {/* Mobile Menu Trigger */}
+        <button
+          className="md:hidden text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`fixed inset-0 bg-[#020617] z-40 transition-transform duration-300 md:hidden ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full pt-24 px-6 gap-6">
           {navLinks.map((link) => (
-            <NavLink
+            <Link
               key={link.name}
               to={link.path}
+              className="text-2xl font-bold text-white hover:text-blue-500 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `block px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
-                  isActive
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`
-              }
             >
               {link.name}
-            </NavLink>
-          ))}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center justify-between w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
-            >
-              <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
-              {isDark ? (
-                <Sun className="w-5 h-5 text-amber-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-blue-500" />
-              )}
-            </button>
-            <Link
-              to="/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg"
-            >
-              Start Project
             </Link>
-          </div>
+          ))}
+          <Link
+            to="/contact"
+            className="w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-center mt-auto mb-8"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Konsultasi Sekarang
+          </Link>
         </div>
       </div>
     </nav>

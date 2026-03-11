@@ -8,6 +8,12 @@
   --animation-float: float 6s ease-in-out infinite;
   --animation-bounce-slow: bounce-slow 4s ease-in-out infinite;
   --animation-fade-in: fade-in 1s ease-out forwards;
+  --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
+  --animation-pulse-shadow: pulseShadow 2.8s infinite;
+  --animation-shine: shine 600ms ease-out forwards;
+  --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
+  --animation-pulse-shadow: pulseShadow 2.8s infinite;
+  --animation-shine: shine 600ms ease-out forwards;
 
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -26,6 +32,38 @@
     100% { transform: translateX(100%); }
   }
   --animation-shimmer: shimmer 2s infinite;
+
+  @keyframes floatingSupportIcon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  
+  @keyframes pulseShadow {
+    0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(30, 64, 175, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0); }
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes floatingSupportIcon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  
+  @keyframes pulseShadow {
+    0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(30, 64, 175, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0); }
+  }
+
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 }
 
 :root {
