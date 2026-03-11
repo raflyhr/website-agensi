@@ -1,0 +1,122 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  LayoutDashboard, Users, Briefcase, Settings, LogOut,
+  TrendingUp, Eye, MessageSquare, Star, Menu, X, Zap, Bell,
+  FileText, Tag, Plus, Pencil, Trash2, Check, ChevronDown,
+  Globe, Instagram, Twitter, Facebook, Youtube, Phone, Mail,
+  Sun, Moon,
+} from 'lucide-react';
+import { useTheme } from "../context/ThemeContext";
+
+// ─────────────── TYPES ───────────────
+type ClientStatus = 'New' | 'Contacted' | 'In Progress' | 'Completed';
+interface Client {
+  id: number; name: string; email: string; type: string;
+  budget: string; status: ClientStatus; date: string;
+}
+interface Portfolio {
+  id: number; name: string; description: string; link: string;
+  image: string; tech: string;
+}
+interface Service {
+  id: number; name: string; description: string; price: string;
+}
+interface PricingPlan {
+  id: number; name: string; price: string; features: string[];
+}
+interface BlogPost {
+  id: number; title: string; category: string; date: string; excerpt: string; image?: string;
+}
+interface Testimonial {
+  id: number; name: string; company: string; review: string; rating: number;
+}
+interface SiteSettings {
+  logo: string; email: string; phone: string; address: string;
+  instagram: string; twitter: string; facebook: string; youtube: string;
+}
+
+// ─────────────── MOCK DATA ───────────────
+const initClients: Client[] = [
+  { id: 1, name: 'PT. Maju Bersama', email: 'info@majubersama.co.id', type: 'Company Profile', budget: 'Rp 3.000.000', status: 'New', date: '2026-03-06' },
+  { id: 2, name: 'CV. Kreatif Nusantara', email: 'hello@kreatif.id', type: 'Landing Page', budget: 'Rp 1.500.000', status: 'In Progress', date: '2026-03-04' },
+  { id: 3, name: 'Toko Sejahtera', email: 'tokosejahtera@gmail.com', type: 'E-Commerce', budget: 'Rp 8.000.000', status: 'Completed', date: '2026-02-28' },
+  { id: 4, name: 'Restoran Bahari', email: 'bahari@resto.com', type: 'Landing Page', budget: 'Rp 2.000.000', status: 'Contacted', date: '2026-03-05' },
+];
+const initPortfolio: Portfolio[] = [
+  { id: 1, name: 'Maju Bersama', description: 'Company profile modern dengan animasi', link: 'https://majubersama.co.id', image: 'https://placehold.co/400x240/6366f1/fff?text=Maju+Bersama', tech: 'React, Tailwind' },
+  { id: 2, name: 'Toko Sejahtera', description: 'Platform e-commerce skala UMKM', link: 'https://tokosejahtera.id', image: 'https://placehold.co/400x240/8b5cf6/fff?text=Toko+Sejahtera', tech: 'Next.js, Prisma' },
+  { id: 3, name: 'Restoran Bahari', description: 'Landing page restoran seafood', link: 'https://restoranbahari.id', image: 'https://placehold.co/400x240/06b6d4/fff?text=Resto+Bahari', tech: 'React, CSS' },
+];
+const initServices: Service[] = [
+  { id: 1, name: 'Landing Page', description: 'Halaman pemasaran profesional untuk promosi produk atau jasa.', price: 'Mulai Rp 1.500.000' },
+  { id: 2, name: 'Company Profile', description: 'Website resmi perusahaan dengan informasi lengkap dan desain premium.', price: 'Mulai Rp 3.000.000' },
+  { id: 3, name: 'Web Application', description: 'Aplikasi web custom sesuai kebutuhan bisnis Anda.', price: 'Mulai Rp 8.000.000' },
+  { id: 4, name: 'E-Commerce', description: 'Toko online lengkap dengan sistem pembayaran terintegrasi.', price: 'Mulai Rp 5.000.000' },
+];
+const initPricing: PricingPlan[] = [
+  { id: 1, name: 'Starter', price: 'Rp 1.500.000', features: ['1 halaman (Landing Page)', 'Desain responsive', 'Domain .com (1 tahun)', 'Hosting (1 tahun)', 'Gratis revisi 3x'] },
+  { id: 2, name: 'Business', price: 'Rp 4.000.000', features: ['Hingga 7 halaman', 'Desain premium', 'Domain + Hosting (1 tahun)', 'CMS sederhana', 'WhatsApp integration', 'Gratis revisi 5x'] },
+  { id: 3, name: 'Premium', price: 'Rp 9.000.000', features: ['Halaman tidak terbatas', 'Desain custom eksklusif', 'Domain + Hosting (1 tahun)', 'E-commerce / Web App', 'SEO Setup', 'Analytics Dashboard', 'Support 3 bulan', 'Gratis revisi 10x'] },
+];
+const initBlog: BlogPost[] = [
+  { id: 1, title: 'Cara Membuat Website untuk Bisnis Lokal', category: 'Tutorial', date: '2026-03-01', excerpt: 'Panduan lengkap membuat website bisnis yang profesional dan menarik pelanggan.' },
+  { id: 2, title: 'Berapa Biaya Website Company Profile 2026?', category: 'Tips', date: '2026-02-20', excerpt: 'Perbandingan harga dan fitur dalam pembuatan website company profile di tahun 2026.' },
+  { id: 3, title: '5 Alasan Bisnis Anda Butuh Website Sekarang', category: 'Artikel', date: '2026-02-10', excerpt: 'Di era digital, website adalah aset penting yang tidak boleh ditunda.' },
+];
+const initTestimonials: Testimonial[] = [
+  { id: 1, name: 'Budi Santoso', company: 'PT. Maju Bersama', review: 'Hasilnya luar biasa! Website kami kini tampak sangat profesional dan modern.', rating: 5 },
+  { id: 2, name: 'Sinta Dewi', company: 'CV. Kreatif Nusantara', review: 'Pengerjaan cepat dan hasilnya sesuai ekspektasi. Tim sangat responsif!', rating: 5 },
+  { id: 3, name: 'Ahmad Fauzi', company: 'Toko Sejahtera', review: 'E-commerce kami kini berjalan lancar. Sangat puas dengan pelayanannya.', rating: 4 },
+];
+const initSettings: SiteSettings = {
+  logo: '/logo.png', email: 'hello@nusify.id', phone: '+62 812 3456 7890',
+  address: 'Jl. Jenderal Sudirman No.10, Jakarta 10220',
+  instagram: 'nusify.id', twitter: 'nusifyid', facebook: 'nusify.id', youtube: 'nusify',
+};
+
+// ─────────────── SHARED COMPONENTS ───────────────
+const Badge = ({ status }: { status: ClientStatus }) => {
+  const map: Record<ClientStatus, string> = {
+    New: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    Contacted: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+    'In Progress': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+    Completed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+  };
+  return <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${map[status]}`}>{status}</span>;
+};
+
+const SectionHeader = ({ title, subtitle, onAdd, addLabel }: { title: string; subtitle?: string; onAdd?: () => void; addLabel?: string }) => (
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+    <div>
+      <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">{title}</h2>
+      {subtitle && <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+    </div>
+    {onAdd && (
+      <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 active:scale-95 transition-all">
+        <Plus className="w-4 h-4" /> {addLabel ?? 'Add New'}
+      </button>
+    )}
+  </div>
+);
+
+const Modal = ({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md p-6 relative" onClick={e => e.stopPropagation()}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">{title}</h3>
+        <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"><X className="w-5 h-5" /></button>
+      </div>
+      {children}
+    </div>
+  </div>
+);
+
+const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div className="mb-4">
+    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">{label}</label>
+    {children}
+  </div>
+);
+
+const inputCls = "w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:
