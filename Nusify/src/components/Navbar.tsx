@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronRight, Sun, Moon, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronRight,
+  Sun,
+  Moon,
+  ChevronDown,
+  MessageCircle,
+  HelpCircle,
+} from "lucide-react";
 import { useTheme } from "../context/theme-core";
 import logoImg from "../assets/Logo.png";
 
@@ -170,12 +179,15 @@ const Navbar = () => {
                       className="group relative w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 rounded-xl transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 overflow-hidden"
                     >
                       {/* Liquid Hover Background */}
-                      <span className="absolute inset-0 bg-blue-50/50 dark:bg-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-blue-50/0 dark:from-blue-900/20 dark:to-blue-900/0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out rounded-xl translate-x-[-10px] group-hover:translate-x-0"></span>
 
                       {/* Content */}
-                      <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:translate-x-1">
-                        Testimonials
-                        <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
+                      <span className="relative z-10 flex items-center gap-2.5 transition-transform duration-300 group-hover:translate-x-1">
+                        <MessageCircle className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                        <span className="font-semibold tracking-wide">
+                          Testimonials
+                        </span>
+                        <ChevronRight className="w-3 h-3 ml-auto opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
                       </span>
                     </button>
                     <button
@@ -183,12 +195,13 @@ const Navbar = () => {
                       className="group relative w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 rounded-xl transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 overflow-hidden"
                     >
                       {/* Liquid Hover Background */}
-                      <span className="absolute inset-0 bg-blue-50/50 dark:bg-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-blue-50/0 dark:from-blue-900/20 dark:to-blue-900/0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out rounded-xl translate-x-[-10px] group-hover:translate-x-0"></span>
 
                       {/* Content */}
-                      <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:translate-x-1">
-                        FAQ
-                        <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
+                      <span className="relative z-10 flex items-center gap-2.5 transition-transform duration-300 group-hover:translate-x-1">
+                        <HelpCircle className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                        <span className="font-semibold tracking-wide">FAQ</span>
+                        <ChevronRight className="w-3 h-3 ml-auto opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
                       </span>
                     </button>
                   </div>
