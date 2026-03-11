@@ -107,7 +107,7 @@ const Pricing = () => {
 
       {/* Pricing Section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-32">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 opacity-0 animate-fade-in-up" style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}>
           <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-4">
             Kenapa harus pembuatan website di Nusify?
           </h2>
@@ -120,36 +120,73 @@ const Pricing = () => {
           {plans.map((plan, idx) => (
             <div 
               key={idx}
-              className={`relative flex flex-col p-8 rounded-[2.5rem] border transition-all duration-500 hover:-translate-y-4 ${
+              className={`relative flex flex-col p-8 rounded-[2.5rem] border transition-all duration-500 group overflow-hidden opacity-0 animate-fade-in-up ${
                 plan.isPopular 
-                  ? "bg-slate-900 dark:bg-blue-600 dark:border-blue-500 border-slate-800 text-white shadow-2xl scale-105 z-10" 
-                  : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white"
+                  ? "bg-slate-900/90 dark:bg-slate-800/80 backdrop-blur-xl border-blue-500/50 text-white shadow-[0_20px_60px_-15px_rgba(59,130,246,0.3)] scale-105 z-10" 
+                  : "bg-white/70 dark:bg-slate-800/50 backdrop-blur-lg border-slate-200/50 dark:border-slate-700/50 text-slate-900 dark:text-white hover:border-blue-400/30 hover:shadow-2xl hover:shadow-blue-900/10"
               }`}
+              style={{ animationDelay: `${0.2 + idx * 0.1}s`, animationFillMode: "forwards" }}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                e.currentTarget.style.setProperty("--x", `${x}px`);
+                e.currentTarget.style.setProperty("--y", `${y}px`);
+              }}
             >
-              <h3 className="text-sm font-black uppercase tracking-widest mb-4 opacity-70 italic">{plan.name}</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-sm font-bold opacity-70">Rp</span>
-                <span className="text-4xl font-black">{plan.price}</span>
-                {plan.price !== "Custom" && <span className="text-sm font-medium opacity-60">/paket</span>}
-              </div>
-              <p className="text-sm mb-8 opacity-70">{plan.description}</p>
-              
-              <ul className="space-y-4 mb-10 grow">
-                {plan.features.map((feature, fIdx) => (
-                  <li key={fIdx} className="flex items-start gap-3 text-sm font-medium">
-                    <Check className={`w-5 h-5 shrink-0 ${plan.isPopular ? "text-blue-400 dark:text-white" : "text-blue-600"}`} />
-                    <span className="opacity-90">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Cursor Follow Glow */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: `radial-gradient(600px circle at var(--x) var(--y), ${plan.isPopular ? 'rgba(59, 130, 246, 0.15)' : 'rgba(99, 102, 241, 0.1)'}, transparent 40%)`
+                }}
+              />
 
-              <button className={`w-full py-4 rounded-2xl font-black text-sm transition-all ${
-                plan.isPopular 
-                  ? "bg-white text-slate-900 hover:bg-slate-100 dark:bg-white dark:text-blue-600" 
-                  : "bg-slate-900 text-white hover:bg-blue-600 dark:bg-blue-600"
-              }`}>
-                Pilih Paket Ini
-              </button>
+              {/* Animated Border Gradient for Popular Plan */}
+              {plan.isPopular && (
+                <div className="absolute inset-0 rounded-[2.5rem] p-[1px] bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 opacity-50 -z-10 animate-gradient-border"></div>
+              )}
+
+              <div className="relative z-10">
+                <h3 className={`text-sm font-black uppercase tracking-widest mb-4 italic flex items-center gap-2 ${plan.isPopular ? "text-blue-400" : "opacity-70"}`}>
+                  {plan.name}
+                  {plan.isPopular && <span className="inline-block px-2 py-0.5 rounded-full bg-blue-500/20 text-[10px] not-italic text-blue-300 border border-blue-500/30">Most Popular</span>}
+                </h3>
+                
+                <div className="flex items-baseline gap-1 mb-6 group-hover:translate-x-1 transition-transform duration-300">
+                  <span className="text-sm font-bold opacity-70">Rp</span>
+                  <span className={`text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r ${plan.isPopular ? "from-white to-blue-200" : "from-slate-900 to-slate-700 dark:from-white dark:to-slate-400"}`}>
+                    {plan.price}
+                  </span>
+                  {plan.price !== "Custom" && <span className="text-sm font-medium opacity-60">/paket</span>}
+                </div>
+                
+                <p className="text-sm mb-8 opacity-70 leading-relaxed min-h-[40px]">{plan.description}</p>
+                
+                <ul className="space-y-4 mb-10 grow">
+                  {plan.features.map((feature, fIdx) => (
+                    <li key={fIdx} className="flex items-start gap-3 text-sm font-medium group/item transition-all duration-300 hover:translate-x-1">
+                      <div className={`p-1 rounded-full ${plan.isPopular ? "bg-blue-500/20 text-blue-300" : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"} transition-all duration-300 group-hover/item:scale-110 group-hover/item:rotate-12`}>
+                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                      </div>
+                      <span className={`opacity-90 group-hover/item:opacity-100 transition-opacity ${plan.isPopular ? "text-slate-100" : "text-slate-700 dark:text-slate-300"}`}>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button className={`relative w-full py-4 rounded-2xl font-black text-sm transition-all duration-300 overflow-hidden group/btn hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
+                  plan.isPopular 
+                    ? "bg-white text-slate-900 hover:bg-blue-50" 
+                    : "bg-slate-900 text-white hover:bg-blue-600 dark:bg-white dark:text-slate-900 dark:hover:bg-blue-50"
+                }`}>
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Pilih Paket Ini
+                    <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                  </span>
+                  {/* Button Shine Effect */}
+                  <div className="absolute inset-0 -translate-x-full group-hover/btn:animate-shine bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
+                </button>
+              </div>
             </div>
           ))}
         </div>
