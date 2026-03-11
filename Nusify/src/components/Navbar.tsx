@@ -134,24 +134,62 @@ const Navbar = () => {
 
                 {/* About Dropdown Menu Container with Hover Bridge */}
                 <div
-                  className={`absolute top-full left-0 pt-4 w-48 transition-all duration-300 transform origin-top ${
+                  className={`absolute top-full left-0 pt-4 w-48 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] transform origin-top-left ${
                     isAboutDropdownOpen
                       ? "opacity-100 scale-100 translate-y-0 visible"
                       : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
                   }`}
                 >
-                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-2 space-y-1">
+                  <div
+                    className="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-2 space-y-1"
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      e.currentTarget.style.setProperty("--x", `${x}px`);
+                      e.currentTarget.style.setProperty("--y", `${y}px`);
+                    }}
+                    style={
+                      {
+                        "--x": "50%",
+                        "--y": "50%",
+                      } as React.CSSProperties
+                    }
+                  >
+                    {/* Panel Glow Effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background:
+                          "radial-gradient(400px circle at var(--x) var(--y), rgba(59, 130, 246, 0.05), transparent 40%)",
+                      }}
+                    />
+
                     <button
                       onClick={() => scrollToSection("testimonials")}
-                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                      className="group relative w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 rounded-xl transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 overflow-hidden"
                     >
-                      Testimonials
+                      {/* Liquid Hover Background */}
+                      <span className="absolute inset-0 bg-blue-50/50 dark:bg-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></span>
+
+                      {/* Content */}
+                      <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:translate-x-1">
+                        Testimonials
+                        <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
+                      </span>
                     </button>
                     <button
                       onClick={() => scrollToSection("faq")}
-                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all"
+                      className="group relative w-full text-left px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 rounded-xl transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 overflow-hidden"
                     >
-                      FAQ
+                      {/* Liquid Hover Background */}
+                      <span className="absolute inset-0 bg-blue-50/50 dark:bg-slate-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></span>
+
+                      {/* Content */}
+                      <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover:translate-x-1">
+                        FAQ
+                        <ChevronRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-500" />
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -178,27 +216,127 @@ const Navbar = () => {
 
                 {/* Services Dropdown Menu */}
                 <div
-                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-300 transform origin-top ${
+                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] transform origin-top-left ${
                     isServicesDropdownOpen
                       ? "opacity-100 scale-100 translate-y-0 visible"
                       : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
                   }`}
                 >
-                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl p-3 space-y-1">
-                    {serviceItems.map((service) => (
-                      <Link
-                        key={service.title}
-                        to={service.path}
-                        className="block w-full text-left p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all group"
-                      >
-                        <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                          {service.title}
-                        </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </Link>
-                    ))}
+                  <div
+                    className="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-2 space-y-1"
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      e.currentTarget.style.setProperty("--x", `${x}px`);
+                      e.currentTarget.style.setProperty("--y", `${y}px`);
+                    }}
+                    style={
+                      {
+                        "--x": "50%",
+                        "--y": "50%",
+                      } as React.CSSProperties
+                    }
+                  >
+                    {/* Panel Glow Effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background:
+                          "radial-gradient(600px circle at var(--x) var(--y), rgba(59, 130, 246, 0.05), transparent 40%)",
+                      }}
+                    />
+
+                    {serviceItems.map((service) => {
+                      if (service.title === "Online Shop") {
+                        return (
+                          <Link
+                            key={service.title}
+                            to={service.path}
+                            className="relative block w-full text-left p-3 rounded-2xl transition-all group overflow-hidden"
+                            onMouseMove={(e) => {
+                              const rect =
+                                e.currentTarget.getBoundingClientRect();
+                              const x = e.clientX - rect.left;
+                              const y = e.clientY - rect.top;
+                              e.currentTarget.style.setProperty(
+                                "--item-x",
+                                `${x}px`,
+                              );
+                              e.currentTarget.style.setProperty(
+                                "--item-y",
+                                `${y}px`,
+                              );
+                            }}
+                          >
+                            {/* Glass Background & Blur */}
+                            <div className="absolute inset-0 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl transition-all duration-300 group-hover:border-blue-500/30 group-hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)]"></div>
+
+                            {/* Cursor Follow Glow Effect */}
+                            <div
+                              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                              style={{
+                                background:
+                                  "radial-gradient(400px circle at var(--item-x) var(--item-y), rgba(59, 130, 246, 0.1), transparent 40%)",
+                              }}
+                            ></div>
+
+                            {/* Content */}
+                            <div className="relative z-10 flex flex-col gap-1 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.02]">
+                              <div className="flex items-center justify-between">
+                                <div className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 group-hover:from-blue-600 group-hover:to-indigo-600 dark:group-hover:from-blue-400 dark:group-hover:to-indigo-400 transition-all duration-300">
+                                  {service.title}
+                                </div>
+                                {/* Animated Icon/Badge */}
+                                <div className="p-1 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2.5}
+                                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors duration-300">
+                                {service.description}
+                              </p>
+                            </div>
+
+                            {/* Gradient Accent Bottom Border */}
+                            <div className="absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </Link>
+                        );
+                      }
+                      return (
+                        <Link
+                          key={service.title}
+                          to={service.path}
+                          className="group relative block w-full text-left p-3 rounded-xl transition-all duration-300 hover:bg-white/50 dark:hover:bg-slate-800/50 overflow-hidden"
+                        >
+                          {/* Hover Background Glow */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                          <div className="relative z-10">
+                            <div className="flex items-center justify-between">
+                              <div className="text-sm font-bold text-slate-900 dark:text-white transition-all duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-1">
+                                {service.title}
+                              </div>
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                            </div>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed transition-all duration-300 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1">
+                              {service.description}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
