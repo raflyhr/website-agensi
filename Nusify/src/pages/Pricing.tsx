@@ -92,6 +92,31 @@ const Pricing = () => {
 
   return (
     <div className="relative min-h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
+      <style>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gradient-border {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shine {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+        .animate-gradient-border {
+          background-size: 200% 200%;
+          animation: gradient-border 3s ease infinite;
+        }
+        .group\\/btn:hover .animate-shine {
+          animation: shine 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      `}</style>
       {/* Background Ornaments */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-blue-50 dark:bg-blue-900/10 pointer-events-none -z-10"></div>
       
@@ -116,7 +141,7 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan, idx) => (
             <div 
               key={idx}
@@ -331,7 +356,7 @@ const Pricing = () => {
 
       {/* Final CTA */}
       <section className="px-6 pb-32">
-        <div className="max-w-7xl mx-auto p-12 md:p-24 rounded-[4rem] bg-linear-to-br from-blue-600 to-indigo-700 relative overflow-hidden text-center text-white shadow-2xl">
+        <div className="max-w-7xl mx-auto p-12 md:p-24 rounded-[4rem] bg-gradient-to-br from-blue-600 to-indigo-700 relative overflow-hidden text-center text-white shadow-2xl">
            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522071823991-b1ae5e6a3048?q=80&w=2000&auto=format&fit=crop')] opacity-20 mix-blend-overlay"></div>
            <div className="relative z-10">
               <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
