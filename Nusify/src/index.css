@@ -11,9 +11,7 @@
   --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
   --animation-pulse-shadow: pulseShadow 2.8s infinite;
   --animation-shine: shine 600ms ease-out forwards;
-  --animation-floatingSupportIcon: floatingSupportIcon 3.5s ease-in-out infinite;
-  --animation-pulse-shadow: pulseShadow 2.8s infinite;
-  --animation-shine: shine 600ms ease-out forwards;
+  --animation-scroll-reveal: scrollReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -49,20 +47,9 @@
     100% { transform: translateX(100%); }
   }
 
-  @keyframes floatingSupportIcon {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
-  }
-  
-  @keyframes pulseShadow {
-    0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.5); }
-    70% { box-shadow: 0 0 0 12px rgba(30, 64, 175, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(30, 64, 175, 0); }
-  }
-
-  @keyframes shine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+  @keyframes scrollReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 }
 
@@ -79,7 +66,96 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Global Smooth Motion Variables */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --cursor-x: 50%;
+  --cursor-y: 50%;
 }
+
+/* GLOBAL INTERACTION SYSTEM */
+
+/* 1. Global Cursor Glow */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--cursor-x) var(--cursor-y),
+    rgba(59, 130, 246, 0.03),
+    transparent 40%
+  );
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+}
+
+body:hover::before {
+  opacity: 1;
+}
+
+.dark body::before {
+  background: radial-gradient(
+    600px circle at var(--cursor-x) var(--cursor-y),
+    rgba(59, 130, 246, 0.08),
+    transparent 40%
+  );
+}
+
+/* 2. Smooth Scroll Physics (CSS Only) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 3. Micro Interaction System */
+
+/* Buttons - Premium Hover */
+button:not(:disabled), .btn {
+  transition: transform 0.3s var(--ease-premium), box-shadow 0.3s var(--ease-premium), background-color 0.2s ease;
+}
+
+button:not(:disabled):hover, .btn:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+button:not(:disabled):active, .btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Cards - Lift & Depth */
+.card, .premium-card, .glass-card {
+  transition: transform 0.4s var(--ease-premium), box-shadow 0.4s var(--ease-premium);
+}
+
+.card:hover, .premium-card:hover, .glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+}
+
+.dark .card:hover, .dark .premium-card:hover, .dark .glass-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Links - Underline Animation */
+a:not(.btn):not([class*="bg-"]):not([class*="button"]) {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* 5. Scroll Reveal Animation Class */
+.reveal-on-scroll {
+  opacity: 0;
+  animation: scrollReveal 0.8s var(--ease-premium) forwards;
+}
+
+/* Stagger Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
 
 body {
   margin: 0;

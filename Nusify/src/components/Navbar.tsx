@@ -229,14 +229,14 @@ const Navbar = () => {
 
                 {/* Services Dropdown Menu */}
                 <div
-                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] transform origin-top-left ${
+                  className={`absolute top-full left-0 pt-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform origin-top-left ${
                     isServicesDropdownOpen
                       ? "opacity-100 scale-100 translate-y-0 visible"
                       : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
                   }`}
                 >
                   <div
-                    className="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-2 space-y-1"
+                    className="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-2 space-y-1 transform-gpu perspective-[1000px]"
                     onMouseMove={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect();
                       const x = e.clientX - rect.left;
@@ -266,12 +266,17 @@ const Navbar = () => {
                           <Link
                             key={service.title}
                             to={service.path}
-                            className="relative block w-full text-left p-3 rounded-2xl transition-all group overflow-hidden"
+                            className="relative block w-full text-left p-3 rounded-2xl transition-all group overflow-hidden hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
                             onMouseMove={(e) => {
                               const rect =
                                 e.currentTarget.getBoundingClientRect();
                               const x = e.clientX - rect.left;
                               const y = e.clientY - rect.top;
+
+                              // Calculate subtle tilt rotation
+                              const rotateX = (y / rect.height - 0.5) * -4; // Max 2 deg
+                              const rotateY = (x / rect.width - 0.5) * 4; // Max 2 deg
+
                               e.currentTarget.style.setProperty(
                                 "--item-x",
                                 `${x}px`,
@@ -280,10 +285,34 @@ const Navbar = () => {
                                 "--item-y",
                                 `${y}px`,
                               );
+                              e.currentTarget.style.setProperty(
+                                "--rotate-x",
+                                `${rotateX}deg`,
+                              );
+                              e.currentTarget.style.setProperty(
+                                "--rotate-y",
+                                `${rotateY}deg`,
+                              );
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.setProperty(
+                                "--rotate-x",
+                                "0deg",
+                              );
+                              e.currentTarget.style.setProperty(
+                                "--rotate-y",
+                                "0deg",
+                              );
+                            }}
+                            style={{
+                              transform:
+                                "perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale3d(1, 1, 1)",
+                              transition:
+                                "transform 0.1s ease-out, box-shadow 0.3s ease",
                             }}
                           >
                             {/* Glass Background & Blur */}
-                            <div className="absolute inset-0 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl transition-all duration-300 group-hover:border-blue-500/30 group-hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)]"></div>
+                            <div className="absolute inset-0 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl transition-all duration-300 group-hover:border-blue-500/30"></div>
 
                             {/* Cursor Follow Glow Effect */}
                             <div
@@ -331,10 +360,25 @@ const Navbar = () => {
                         <Link
                           key={service.title}
                           to={service.path}
-                          className="group relative block w-full text-left p-3 rounded-xl transition-all duration-300 hover:bg-white/50 dark:hover:bg-slate-800/50 overflow-hidden"
+                          className="group relative block w-full text-left p-3 rounded-xl transition-all duration-300 overflow-hidden"
+                          onMouseMove={(e) => {
+                            // Magnetic Effect
+                            const rect =
+                              e.currentTarget.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+                            const moveX = (x - rect.width / 2) / 20; // Subtle movement
+                            const moveY = (y - rect.height / 2) / 20;
+
+                            e.currentTarget.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform =
+                              "translate(0px, 0px)";
+                          }}
                         >
                           {/* Hover Background Glow */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out" />
 
                           <div className="relative z-10">
                             <div className="flex items-center justify-between">
