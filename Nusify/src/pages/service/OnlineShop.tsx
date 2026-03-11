@@ -1,12 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  useMotionValue,
-  type Variants,
-} from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import {
   MessageCircle,
   ShoppingCart,
@@ -51,28 +44,6 @@ const fadeUp: Variants = {
 };
 
 export default function OnlineShop() {
-  const { scrollYProgress, scrollY } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  // Parallax Transforms
-  const yBackground = useTransform(scrollY, [0, 5000], [0, 1000]); // Slower background
-  const rotateDecor = useTransform(scrollY, [0, 5000], [0, 180]);
-
-  // Mouse Parallax Logic
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    mouseX.set((clientX - centerX) / 50);
-    mouseY.set((clientY - centerY) / 50);
-  };
 
   const logos = [
     { name: "PLN", logo: "https://logo.clearbit.com/pln.co.id" },
@@ -99,81 +70,12 @@ export default function OnlineShop() {
   return (
     <div
       className="relative min-h-screen text-white bg-gradient-to-b from-[#020617] via-[#050a18] to-[#020617] overflow-hidden"
-      onMouseMove={handleMouseMove}
     >
-      {/* Scroll Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 origin-left z-50"
-        style={{ scaleX }}
-      />
-
-      <motion.div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden z-0"
-        style={{ y: yBackground }}
-      >
-        {/* Layer 1: Primary Aurora Blob */}
-        <motion.div
-          animate={{
-            x: ["-20%", "20%", "-20%"],
-            y: ["-20%", "20%", "-20%"],
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-          }}
-          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20 blur-[150px] rounded-full opacity-60 mix-blend-screen"
-        />
-
-        {/* Layer 2: Secondary Aurora Flow */}
-        <motion.div
-          animate={{
-            x: ["20%", "-20%", "20%"],
-            y: ["20%", "-20%", "20%"],
-            scale: [1.2, 1, 1.2],
-            rotate: [0, -90, 0],
-          }}
-          transition={{ duration: 40, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-gradient-to-r from-indigo-600/20 via-pink-600/20 to-blue-600/20 blur-[150px] rounded-full opacity-50 mix-blend-screen"
-        />
-
-        {/* Layer 3: Subtle Mist Layer */}
-        <motion.div
-          animate={{
-            opacity: [0.3, 0.5, 0.3],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-500/5 to-transparent blur-[100px]"
-        />
-
-        {/* Global Floating Tech Elements */}
-        <motion.div
-          animate={{ y: [0, -30, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          style={{ x: mouseX, y: mouseY, rotate: rotateDecor }}
-          className="absolute top-[20%] left-[5%] text-white/5 font-mono text-8xl font-bold select-none"
-        >
-          {"{ }"}
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, 40, 0], opacity: [0.1, 0.2, 0.1] }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-          style={{ x: mouseX, y: mouseY, rotate: rotateDecor }}
-          className="absolute top-[60%] right-[10%] text-white/5 font-mono text-6xl font-bold select-none"
-        >
-          {"< >"}
-        </motion.div>
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-          style={{ x: mouseX, y: mouseY }}
-          className="absolute bottom-[20%] left-[15%] w-64 h-64 border border-dashed border-white/5 rounded-full"
-        />
-      </motion.div>
+      {/* Static Background Gradient */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-gradient-to-r from-blue-600/15 via-purple-600/15 to-cyan-600/15 blur-[150px] rounded-full opacity-60" />
+        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-gradient-to-r from-indigo-600/15 via-pink-600/15 to-blue-600/15 blur-[150px] rounded-full opacity-40" />
+      </div>
       <main className="text-slate-300 relative z-10">
         {/* HERO SECTION */}
         <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
@@ -290,87 +192,33 @@ export default function OnlineShop() {
                 />
 
                 {/* Mascot Integration */}
-                <motion.div
-                  animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute -bottom-10 -left-10 z-20 w-32 h-32 md:w-40 md:h-40"
-                >
+                <div className="absolute -bottom-10 -left-10 z-20 w-32 h-32 md:w-40 md:h-40">
                   <NusifyMascot />
-                </motion.div>
+                </div>
 
-                {/* Floating UI Elements */}
-                {/* Cart */}
-                <motion.div
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0,
-                  }}
-                  className="absolute top-10 -right-8 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl"
-                >
+                {/* Floating UI Elements - static, no continuous animation */}
+                <div className="absolute top-10 -right-8 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <ShoppingCart className="w-6 h-6 text-blue-400" />
-                </motion.div>
+                </div>
 
-                {/* Payment */}
-                <motion.div
-                  animate={{ y: [0, 15, 0] }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1,
-                  }}
-                  className="absolute bottom-20 -right-4 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl"
-                >
+                <div className="absolute bottom-20 -right-4 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <CreditCard className="w-6 h-6 text-emerald-400" />
-                </motion.div>
+                </div>
 
-                {/* Truck */}
-                <motion.div
-                  animate={{ x: [0, 10, 0], y: [0, -5, 0] }}
-                  transition={{
-                    duration: 7,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2,
-                  }}
-                  className="absolute top-1/2 -left-12 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl"
-                >
+                <div className="absolute top-1/2 -left-12 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <Truck className="w-6 h-6 text-orange-400" />
-                </motion.div>
+                </div>
 
-                {/* Analytics */}
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 3,
-                  }}
-                  className="absolute -top-8 left-20 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-xl flex items-center gap-2"
-                >
+                <div className="absolute -top-8 left-20 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-xl flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-purple-400" />
-                  <span className="text-xs font-bold text-white">
-                    +128% Sales
-                  </span>
-                </motion.div>
+                  <span className="text-xs font-bold text-white">+128% Sales</span>
+                </div>
               </div>
 
               {/* Decorative Tech Elements */}
-              <motion.div
-                animate={{ opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute top-0 right-0 text-white/5 font-mono text-6xl font-bold select-none -z-10"
-              >
+              <div className="absolute top-0 right-0 text-white/5 font-mono text-6xl font-bold select-none -z-10">
                 {"{ }"}
-              </motion.div>
+              </div>
               <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
             </motion.div>
           </div>
@@ -529,37 +377,24 @@ export default function OnlineShop() {
               </motion.div>
             </div>
 
-            {/* Mascot Element */}
-            <motion.div
-              className="absolute -right-20 top-1/2 -translate-y-1/2 hidden xl:block pointer-events-none"
-              animate={{
-                y: ["-50%", "-45%", "-50%"],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
+            {/* Mascot Element - static */}
+            <div className="absolute -right-20 top-1/2 -translate-y-1/2 hidden xl:block pointer-events-none">
               <div className="relative w-40 h-40 opacity-80 hover:opacity-100 transition-opacity">
                 <NusifyMascot />
-                {/* Speech Bubble */}
-                <div className="absolute -top-12 -left-20 bg-white text-slate-900 px-4 py-2 rounded-xl rounded-br-none shadow-lg text-sm font-bold animate-bounce">
+                <div className="absolute -top-12 -left-20 bg-white text-slate-900 px-4 py-2 rounded-xl rounded-br-none shadow-lg text-sm font-bold">
                   Best Choice!
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Programmer Decorations */}
-          <div className="absolute top-20 left-10 text-white/5 font-mono text-4xl font-bold select-none animate-pulse hidden md:block">
+          {/* Programmer Decorations - static */}
+          <div className="absolute top-20 left-10 text-white/5 font-mono text-4xl font-bold select-none hidden md:block">
             {"{"}
           </div>
-          <div className="absolute bottom-20 right-10 text-white/5 font-mono text-4xl font-bold select-none animate-pulse hidden md:block">
+          <div className="absolute bottom-20 right-10 text-white/5 font-mono text-4xl font-bold select-none hidden md:block">
             {"}"}
           </div>
-          <div className="absolute top-1/3 right-5 w-24 h-24 border border-white/5 rounded-full border-dashed animate-spin-slow hidden md:block"></div>
         </section>
 
         {/* DID YOU KNOW SECTION */}
@@ -588,14 +423,10 @@ export default function OnlineShop() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="relative"
               >
-                {/* Floating Elements */}
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -top-10 -left-10 text-white/5 font-mono text-6xl font-bold select-none hidden md:block"
-                >
+                {/* Decorative text - static */}
+                <div className="absolute -top-10 -left-10 text-white/5 font-mono text-6xl font-bold select-none hidden md:block">
                   {"{ ? }"}
-                </motion.div>
+                </div>
 
                 {/* Main Text */}
                 <div className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter text-white/10 select-none">
@@ -657,21 +488,10 @@ export default function OnlineShop() {
                   </div>
                 </motion.div>
 
-                {/* Mascot Element */}
-                <motion.div
-                  className="absolute -bottom-20 -right-10 w-48 h-48 hidden md:block z-20 pointer-events-none"
-                  animate={{
-                    y: [0, -10, 0],
-                    rotate: [0, -5, 0],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
+                {/* Mascot Element - static */}
+                <div className="absolute -bottom-20 -right-10 w-48 h-48 hidden md:block z-20 pointer-events-none">
                   <NusifyMascot />
-                </motion.div>
+                </div>
 
                 {/* Abstract Lines */}
                 <svg
