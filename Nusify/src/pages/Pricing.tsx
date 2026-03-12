@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Check, ChevronDown, ChevronRight, MapPin, Star, MessageCircle, Layout, Rocket } from "lucide-react";
 
 interface PricingPlan {
@@ -87,6 +88,7 @@ const PortfolioCategory = ({ title, active, onClick }: { title: string, active: 
 );
 
 const Pricing = () => {
+  const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [activeCategory, setActiveCategory] = useState("Company Profile");
 
@@ -199,7 +201,9 @@ const Pricing = () => {
                   ))}
                 </ul>
 
-                <button className={`relative w-full py-4 rounded-2xl font-black text-sm transition-all duration-300 overflow-hidden group/btn hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
+                <button 
+                  onClick={() => navigate("/payment", { state: { name: plan.name, price: plan.price } })}
+                  className={`relative w-full py-4 rounded-2xl font-black text-sm transition-all duration-300 overflow-hidden group/btn hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] ${
                   plan.isPopular 
                     ? "bg-white text-slate-900 hover:bg-blue-50" 
                     : "bg-slate-900 text-white hover:bg-blue-600 dark:bg-white dark:text-slate-900 dark:hover:bg-blue-50"
