@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { User, Video, Quote, PlayCircle } from "lucide-react";
 import NusifyMascot from "./NusifyMascot";
+import wpuThumbnail from "../assets/wpu-thumbnail.png";
 
 interface Testimonial {
   id: number;
@@ -14,11 +15,10 @@ const VideoTestimonialSection = () => {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      name: "Andi Wijaya",
-      company: "Tech Solution Indonesia",
-      thumbnail:
-        "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=250&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Placeholder
+      name: "WPU",
+      company: "Programer Solution Indonesia",
+      thumbnail: wpuThumbnail,
+      videoUrl: "https://www.youtube.com/embed/l1W2OwV5rgY", // Valid WPU Video ID
     },
     {
       id: 2,
