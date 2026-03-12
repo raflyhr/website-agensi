@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -9,21 +9,26 @@ import {
   ChevronDown,
   MessageCircle,
   HelpCircle,
+  LogOut,
+  LayoutDashboard,
 } from "lucide-react";
 import { useTheme } from "../context/theme-core";
+import { useAuth } from "../context/AuthContext";
 import logoImg from "../assets/Logo.png";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const [aboutTimeout, setAboutTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [servicesTimeout, setServicesTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  );
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [aboutTimeout, setAboutTimeout] = useState<any>(null);
+  const [servicesTimeout, setServicesTimeout] = useState<any>(null);
+  const [profileTimeout, setProfileTimeout] = useState<any>(null);
   const isDark = theme === "dark";
 
   // Handle About dropdown hover logic
@@ -46,6 +51,17 @@ const Navbar = () => {
   const handleServicesMouseLeave = () => {
     const timeout = setTimeout(() => setIsServicesDropdownOpen(false), 300);
     setServicesTimeout(timeout);
+  };
+
+  // Handle Profile dropdown hover logic
+  const handleProfileMouseEnter = () => {
+    if (profileTimeout) clearTimeout(profileTimeout);
+    setIsProfileDropdownOpen(true);
+  };
+
+  const handleProfileMouseLeave = () => {
+    const timeout = setTimeout(() => setIsProfileDropdownOpen(false), 300);
+    setProfileTimeout(timeout);
   };
 
   // Function to handle scroll to section
@@ -429,17 +445,59 @@ const Navbar = () => {
                 <Moon className="w-5 h-5" />
               )}
             </button>
-            <Link
-              to="/login"
-              className="relative inline-flex items-center justify-center px-7 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-gradient-to-br from-brand-blue to-brand-purple rounded-full group hover:shadow-2xl hover:shadow-blue-500/30 active:scale-95"
-            >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-blue to-brand-purple"></span>
-              <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
-              <span className="relative flex items-center gap-2">
-                Start Project
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </Link>
+
+            {isAuthenticated ? (
+              <div 
+                className="relative"
+                onMouseEnter={handleProfileMouseEnter}
+                onMouseLeave={handleProfileMouseLeave}
+              >
+                <button className="flex items-center gap-3 p-1 pr-4 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 group border border-slate-200/50 dark:border-slate-700/50">
+                  <div className="w-9 h-9 bg-linear-to-br from-brand-blue to-brand-purple rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-105 transition-transform">
+                    {user?.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                    {user?.name.split(' ')[0]}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                <div className={`absolute top-full right-0 pt-3 w-56 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] transform origin-top-right ${
+                  isProfileDropdownOpen ? "opacity-100 scale-100 translate-y-0 visible" : "opacity-0 scale-95 -translate-y-2 invisible pointer-events-none"
+                }`}>
+                  <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-2xl p-2 space-y-1">
+                    <Link 
+                      to="/dashboard"
+                      className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-xl transition-all group"
+                    >
+                      <LayoutDashboard size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                      Dashboard
+                    </Link>
+                    <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+                    <button 
+                      onClick={() => { logout(); navigate('/login'); }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all group"
+                    >
+                      <LogOut size={18} className="text-red-400 group-hover:text-red-600 transition-colors" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="relative inline-flex items-center justify-center px-7 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-gradient-to-br from-brand-blue to-brand-purple rounded-full group hover:shadow-2xl hover:shadow-blue-500/30 active:scale-95"
+              >
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-blue to-brand-purple"></span>
+                <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
+                <span className="relative flex items-center gap-2">
+                  Start Project
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Trigger */}
@@ -580,13 +638,39 @@ const Navbar = () => {
                 <Moon className="w-5 h-5 text-blue-500" />
               )}
             </button>
-            <Link
-              to="/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg"
-            >
-              Start Project
-            </Link>
+            
+            {isAuthenticated ? (
+              <div className="space-y-2">
+                <Link
+                  to="/dashboard"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-4 w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
+                >
+                  <div className="w-10 h-10 bg-linear-to-br from-brand-blue to-brand-purple rounded-full flex items-center justify-center text-white font-bold">
+                    {user?.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm">{user?.name}</p>
+                    <p className="text-xs text-slate-500 font-medium">View Dashboard</p>
+                  </div>
+                  <ChevronRight size={18} className="text-slate-400" />
+                </Link>
+                <button
+                  onClick={() => { logout(); setIsMobileMenuOpen(false); navigate('/login'); }}
+                  className="flex items-center justify-center w-full px-6 py-4 text-red-600 bg-red-50 dark:bg-red-900/10 font-bold rounded-2xl"
+                >
+                  <LogOut size={18} className="mr-2" /> Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg"
+              >
+                Start Project
+              </Link>
+            )}
           </div>
         </div>
       </div>
