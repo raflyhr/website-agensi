@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion, type Variants } from "framer-motion";
+import onlineShopHero from "../../assets/online-shop-hero.png";
+import tshirtDesignProject from "../../assets/tshirt-design-project.jpg";
+import ctaImage from "../../assets/cta-image.png";
 import {
   MessageCircle,
   ShoppingCart,
@@ -44,7 +47,6 @@ const fadeUp: Variants = {
 };
 
 export default function OnlineShop() {
-
   const logos = [
     { name: "PLN", logo: "https://logo.clearbit.com/pln.co.id" },
     {
@@ -68,9 +70,7 @@ export default function OnlineShop() {
   ];
 
   return (
-    <div
-      className="relative min-h-screen text-white bg-gradient-to-b from-[#020617] via-[#050a18] to-[#020617] overflow-hidden"
-    >
+    <div className="relative min-h-screen text-white bg-gradient-to-b from-[#020617] via-[#050a18] to-[#020617] overflow-hidden">
       {/* Static Background Gradient */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-gradient-to-r from-blue-600/15 via-purple-600/15 to-cyan-600/15 blur-[150px] rounded-full opacity-60" />
@@ -180,7 +180,7 @@ export default function OnlineShop() {
 
                 {/* Main Illustration (Woman Unboxing) */}
                 <img
-                  src="https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1200&auto=format&fit=crop"
+                  src={onlineShopHero}
                   alt="Online Shop Success"
                   className="relative z-10 w-full h-full object-cover rounded-[3rem] border border-white/10 shadow-2xl"
                   style={{
@@ -197,21 +197,23 @@ export default function OnlineShop() {
                 </div>
 
                 {/* Floating UI Elements - static, no continuous animation */}
-                <div className="absolute top-10 -right-8 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
+                <div className="absolute top-10 -right-8 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <ShoppingCart className="w-6 h-6 text-blue-400" />
                 </div>
 
-                <div className="absolute bottom-20 -right-4 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
+                <div className="absolute bottom-20 -right-4 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <CreditCard className="w-6 h-6 text-emerald-400" />
                 </div>
 
-                <div className="absolute top-1/2 -left-12 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
+                <div className="absolute top-1/2 -left-12 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-xl">
                   <Truck className="w-6 h-6 text-orange-400" />
                 </div>
 
-                <div className="absolute -top-8 left-20 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-xl flex items-center gap-2">
+                <div className="absolute -top-8 left-20 z-20 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-xl flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-purple-400" />
-                  <span className="text-xs font-bold text-white">+128% Sales</span>
+                  <span className="text-xs font-bold text-white">
+                    +128% Sales
+                  </span>
                 </div>
               </div>
 
@@ -1508,9 +1510,9 @@ export default function OnlineShop() {
             >
               {[
                 {
-                  name: "Pantry Magic",
+                  name: "Fashion ",
                   desc: "E-commerce kitchenware premium dengan navigasi intuitif.",
-                  img: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1200&auto=format&fit=crop",
+                  img: tshirtDesignProject,
                   tags: ["E-Commerce", "Retail"],
                 },
                 {
@@ -1798,7 +1800,7 @@ export default function OnlineShop() {
               {/* Photo Frame */}
               <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2000&auto=format&fit=crop"
+                  src={ctaImage}
                   alt="Imajiner Team"
                   className="w-full h-[400px] md:h-[500px] object-cover filter brightness-75 group-hover:brightness-90 transition-all duration-700 group-hover:scale-105"
                 />

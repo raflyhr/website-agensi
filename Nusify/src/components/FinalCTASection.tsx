@@ -1,4 +1,5 @@
 import { MessageCircle, Send, Sparkles, ArrowRight } from "lucide-react";
+import ctaImage from "../assets/cta-image.png";
 
 const FinalCTASection = () => {
   const whatsappNumber = "6282373336946";
@@ -78,7 +79,7 @@ const FinalCTASection = () => {
             <div className="max-w-5xl mx-auto overflow-hidden">
               {/* Using a friendly business group photo placeholder */}
               <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80"
+                src={ctaImage}
                 alt="Nusify Professional Team"
                 className="w-full h-auto rounded-[4rem] grayscale hover:grayscale-0 transition-all duration-1000 shadow-2xl border-4 border-white/10 dark:border-slate-800 transform hover:scale-[1.02]"
               />

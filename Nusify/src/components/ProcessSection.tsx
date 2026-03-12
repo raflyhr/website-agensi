@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import teamImage from "../assets/IMG_5579.jpg";
 
 const ProcessSection = () => {
   const steps = [
@@ -115,7 +116,7 @@ const ProcessSection = () => {
               {/* Image Cut-out Mockup using a Placeholder Image */}
               <div className="relative z-10 max-w-[400px]">
                 <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80"
+                  src={teamImage}
                   alt="Nusify Team"
                   className="rounded-[3rem] shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border-8 border-white dark:border-slate-800"
                 />
