@@ -26,7 +26,7 @@ interface PricingPlan {
   id: number; name: string; price: string; features: string[];
 }
 interface BlogPost {
-  id: number; title: string; category: string; date: string; excerpt: string; image?: string;
+  id: number; title: string; category: string; date: string; excerpt: string; image?: string; content?: string;
 }
 interface Testimonial {
   id: number; name: string; company: string; review: string; rating: number;
@@ -60,9 +60,87 @@ const initPricing: PricingPlan[] = [
   { id: 3, name: 'Premium', price: 'Rp 9.000.000', features: ['Halaman tidak terbatas', 'Desain custom eksklusif', 'Domain + Hosting (1 tahun)', 'E-commerce / Web App', 'SEO Setup', 'Analytics Dashboard', 'Support 3 bulan', 'Gratis revisi 10x'] },
 ];
 const initBlog: BlogPost[] = [
-  { id: 1, title: 'Cara Membuat Website untuk Bisnis Lokal', category: 'Tutorial', date: '2026-03-01', excerpt: 'Panduan lengkap membuat website bisnis yang profesional dan menarik pelanggan.' },
-  { id: 2, title: 'Berapa Biaya Website Company Profile 2026?', category: 'Tips', date: '2026-02-20', excerpt: 'Perbandingan harga dan fitur dalam pembuatan website company profile di tahun 2026.' },
-  { id: 3, title: '5 Alasan Bisnis Anda Butuh Website Sekarang', category: 'Artikel', date: '2026-02-10', excerpt: 'Di era digital, website adalah aset penting yang tidak boleh ditunda.' },
+  {
+    id: 1,
+    title: "Mengapa Iklan Anda Belum Sukses? Kesalahan Terbesar yang Paling Sering Terjadi",
+    excerpt: "Banyak pengusaha yang melakukan kesalahan fatal ini saat menjalankan iklan digital...",
+    category: "Digital Marketing",
+    date: "2024-03-10",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Kesalahan Fatal dalam Iklan Digital</h2><p>Menjalankan iklan bukan hanya soal membakar uang. Banyak yang gagal karena mereka menargetkan audiens yang salah atau tidak memiliki landing page yang teroptimasi.</p><h3>1. Targeting yang Terlalu Luas</h3><p>Mencoba menjual ke semua orang sama saja dengan tidak menjual ke siapa pun. Spesifikasikan siapa pelanggan ideal Anda.</p><h3>2. Copywriting yang Membosankan</h3><p>Iklan Anda harus bisa menghentikan scrolling pengguna. Gunakan hook yang kuat di 3 detik pertama.</p><h3>3. Tidak Ada Data Retargeting</h3><p>Seringkali pembelian tidak terjadi di pertemuan pertama. Gunakan Pixel untuk menargetkan ulang mereka yang sudah tertarik.</p>`
+  },
+  {
+    id: 2,
+    title: "Perpanjangan dan Maintainance Website Apakah Wajib? Ini Jawabannya",
+    excerpt: "Apakah Anda menggunakan jasa profesional untuk membuat website? Ketahui kapan harus...",
+    category: "Tips Website",
+    date: "2024-03-08",
+    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Pentingnya Maintenance Website</h2><p>Banyak yang beranggapan bahwa setelah website jadi, tugas selesai. Padahal, website adalah aset digital yang butuh perawatan berkala.</p><h3>Keamanan adalah Prioritas</h3><p>Sistem CMS dan plugin perlu diupdate untuk menutup celah keamanan dari serangan malware atau hacker.</p><h3>Performa yang Tetap Stabil</h3><p>Database yang membengkak seiring waktu bisa memperlambat loading website. Maintenance memastikan website tetap kencang.</p><p>Jangan sampai bisnis Anda rugi hanya karena website down di saat jam sibuk pelanggan.</p>`
+  },
+  {
+    id: 3,
+    title: "3 Metris Terpenting yang Harus dimonitor agar Digital Marketing Anda Sukses",
+    excerpt: "Monitoring metris adalah kunci utama untuk mengetahui keberhasilan kampanye...",
+    category: "Marketing",
+    date: "2024-03-05",
+    image: "https://images.unsplash.com/photo-1551288049-bbbda536339a?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Jangan Hanya Melihat 'Like', Lihatlah Data Ini</h2><p>Dalam dunia digital marketing, data adalah segalanya. Namun tidak semua data itu relevan untuk pertumbuhan bisnis Anda.</p><h3>1. Customer Acquisition Cost (CAC)</h3><p>Berapa biaya yang Anda keluarkan untuk mendapatkan satu pelanggan baru? Jika biaya iklan lebih besar dari profit, strategi Anda perlu dievaluasi.</p><h3>2. Conversion Rate (CR)</h3><p>Berapa persen pengunjung yang benar-benar melakukan tindakan (membeli/kontak)? Metris ini menunjukkan efektivitas penawaran Anda.</p><h3>3. Customer Lifetime Value (CLV)</h3><p>Berapa total nilai belanja pelanggan selama mereka loyal kepada Anda. Bisnis yang sukses adalah bisnis yang bisa membuat pelanggan datang lagi.</p>`
+  },
+  {
+    id: 4,
+    title: "Buat Website Sendiri vs Pakai Jasa Profesional: Untung dan Ruginya",
+    excerpt: "Kemajuan teknologi membuat siapa pun bisa membuat website sendiri. Bagaiamana...",
+    category: "Development",
+    date: "2024-03-01",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Dilema Pembuatan Website</h2><p>Zaman sekarang, tools seperti Wix atau Canva memudahkan siapa saja membuat website. Namun, untuk skala bisnis, apakah itu cukup?</p><h3>Keuntungan Buat Sendiri</h3><p>Biaya yang dikeluarkan sangat minimal. Cocok untuk Anda yang baru memulai hobi atau sekadar portofolio sederhana.</p><h3>Kelebihan Jasa Profesional</h3><p>Website dibuat dengan struktur kode yang SEO-friendly, desain unik yang merepresentasikan brand, dan dukungan teknis 24/7. Anda bisa fokus mengurus bisnis, biar kami yang urus teknisnya.</p>`
+  },
+  {
+    id: 5,
+    title: "Peluang: Bagaimana Memanfaatkannya dengan Baik",
+    excerpt: "Peluang ada di mana-mana dan bisa muncul kapan saja. Sudahkah Anda...",
+    category: "Business",
+    date: "2024-02-28",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Peluang Hanya Datang pada yang Siap</h2><p>Di era ekonomi digital yang berubah cepat, kemampuan membaca peluang adalah aset terbesar seorang pengusaha.</p><p>Jangan menunggu peluang sempurna. Ambillah peluang yang ada, lakukan validasi cepat, dan lakukan iterasi. Kegagalan tercepat adalah tidak pernah mencoba sama sekali.</p><blockquote>Peluang emas seringkali terbungkus dalam pakaian kerja yang melelahkan.</blockquote>`
+  },
+  {
+    id: 6,
+    title: "Price vs Value: Yang Harus diketahui Pembeli dan Penjual",
+    excerpt: "Kita tahu untuk mendapatkan suatu produk atau jasa ada harga yang harus dibayar...",
+    category: "Insights",
+    date: "2024-02-25",
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Kenapa Ada Website Seharga 500rb dan 50jt?</h2><p>Harga (Price) adalah apa yang Anda bayar. Nilai (Value) adalah apa yang Anda dapatkan.</p><p>Jasa website murah biasanya hanya memberikan template standar. Sebaliknya, website bernilai tinggi memberikan desain yang meningkatkan kepercayaan pelanggan dan sistem yang mengonversi pengunjung menjadi pembeli.</p><p>Pilihlah investasi yang memberikan ROI (Return on Investment) terbaik bagi bisnis Anda dalam jangka panjang.</p>`
+  },
+  {
+    id: 7,
+    title: "Strategi SEO Efektif untuk Website Baru di Tahun 2024",
+    excerpt: "Memulai dari nol tidaklah mudah. Pelajari strategi SEO yang paling efektif untuk...",
+    category: "SEO",
+    date: "2024-02-20",
+    image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>SEO di Tahun 2024: Adaptasi dengan AI</h2><p>Google terus memperbarui algoritma mereka. Strategi SEO lama mungkin sudah tidak efektif lagi.</p><h3>E-E-A-T Adalah Kunci</h3><p>Experience, Expertise, Authoritativeness, dan Trustworthiness. Google lebih menyukai konten yang ditulis oleh ahli di bidangnya.</p><h3>Optimasi untuk Search Intent</h3><p>Jangan hanya menembak keyword, tapi pahami apa yang dicari pengguna. Apakah mereka ingin informasi (Informatif) atau ingin membeli (Transaksional)?</p>`
+  },
+  {
+    id: 8,
+    title: "Panduan Google Ads untuk Mendatangkan Profit Konsisten",
+    excerpt: "Apa yang terjadi jika Anda menggunakan Google Ads untuk bisnis Anda? Simak...",
+    category: "Advertising",
+    date: "2024-02-15",
+    image: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Mendominasi Baris Pertama Google</h2><p>Google Ads adalah cara tercepat untuk mendapatkan traffic berkualitas tinggi langsung ke website Anda.</p><p>Kunci suksesnya terletak pada pemilihan keyword yang memiliki niat beli tinggi dan Quality Score landing page yang baik. Dengan strategi bidding yang tepat, Anda bisa mengungguli kompetitor besar sekalipun.</p>`
+  },
+  {
+    id: 9,
+    title: "Tools yang Tepat untuk Membuat Website Anda Lebih Cepat",
+    excerpt: "Kecepatan adalah segalanya di dunia digital. Gunakan tools pilihan kami untuk...",
+    category: "Development",
+    date: "2024-02-10",
+    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop",
+    content: `<h2>Tools Wajib Web Developer</h2><p>Sekecil apapun delay pada website Anda, itu bisa menghilangkan potensi pelanggan.</p><p>Gunakan tools seperti <strong>Google PageSpeed Insights</strong> untuk audit, <strong>TinyPNG</strong> untuk optimasi gambar, dan <strong>Vite</strong> untuk development workflow yang lebih efisien.</p><p>Ingat, 1 detik saja lebih lambat bisa menurunkan tingkat konversi hingga 7%.</p>`
+  },
 ];
 const initTestimonials: Testimonial[] = [
   { id: 1, name: 'Budi Santoso', company: 'PT. Maju Bersama', review: 'Hasilnya luar biasa! Website kami kini tampak sangat profesional dan modern.', rating: 5 },
@@ -577,11 +655,11 @@ const PricingSection = ({ plans, setPlans }: { plans: PricingPlan[]; setPlans: (
 // Blog
 const BlogSection = ({ posts, setPosts }: { posts: BlogPost[]; setPosts: (p: BlogPost[]) => void }) => {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<Omit<BlogPost, 'id'>>({ title: '', category: '', date: '', excerpt: '', image: '' });
+  const [form, setForm] = useState<Omit<BlogPost, 'id'>>({ title: '', category: '', date: '', excerpt: '', image: '', content: '' });
   const [editId, setEditId] = useState<number | null>(null);
 
-  const openAdd = () => { setForm({ title: '', category: '', date: new Date().toISOString().slice(0, 10), excerpt: '', image: '' }); setEditId(null); setOpen(true); };
-  const openEdit = (p: BlogPost) => { setForm({ title: p.title, category: p.category, date: p.date, excerpt: p.excerpt, image: p.image || '' }); setEditId(p.id); setOpen(true); };
+  const openAdd = () => { setForm({ title: '', category: '', date: new Date().toISOString().slice(0, 10), excerpt: '', image: '', content: '' }); setEditId(null); setOpen(true); };
+  const openEdit = (p: BlogPost) => { setForm({ title: p.title, category: p.category, date: p.date, excerpt: p.excerpt, image: p.image || '', content: p.content || '' }); setEditId(p.id); setOpen(true); };
   const save = () => {
     if (editId !== null) setPosts(posts.map(p => p.id === editId ? { ...form, id: editId } : p));
     else setPosts([{ ...form, id: Date.now() }, ...posts]);
@@ -639,7 +717,8 @@ const BlogSection = ({ posts, setPosts }: { posts: BlogPost[]; setPosts: (p: Blo
               </div>
             )}
           </Field>
-          <Field label="Ringkasan (Excerpt)"><textarea value={form.excerpt} onChange={e => setForm({ ...form, excerpt: e.target.value })} className={inputCls} rows={3} placeholder="Ringkasan singkat artikel..." /></Field>
+          <Field label="Ringkasan (Excerpt)"><textarea value={form.excerpt} onChange={e => setForm({ ...form, excerpt: e.target.value })} className={inputCls} rows={2} placeholder="Ringkasan singkat artikel..." /></Field>
+          <Field label="Konten Lengkap (HTML)"><textarea value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} className={inputCls} rows={6} placeholder="Konten lengkap artikel (bisa pakai tag HTML)..." /></Field>
           <div className="flex gap-3 mt-2">
             <button onClick={() => setOpen(false)} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Batal</button>
             <button onClick={save} className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90">Simpan</button>
@@ -843,13 +922,43 @@ const AdminDashboard = () => {
 
   const [active, setActive] = useState<Section>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [clients, setClients] = useState<Client[]>(initClients);
-  const [portfolio, setPortfolio] = useState<Portfolio[]>(initPortfolio);
-  const [services, setServices] = useState<Service[]>(initServices);
-  const [pricing, setPricing] = useState<PricingPlan[]>(initPricing);
-  const [blog, setBlog] = useState<BlogPost[]>(initBlog);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(initTestimonials);
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(initSettings);
+  const [clients, setClients] = useState<Client[]>(() => {
+    const saved = localStorage.getItem("nusify_clients");
+    return saved ? JSON.parse(saved) : initClients;
+  });
+  const [portfolio, setPortfolio] = useState<Portfolio[]>(() => {
+    const saved = localStorage.getItem("nusify_portfolio");
+    return saved ? JSON.parse(saved) : initPortfolio;
+  });
+  const [services, setServices] = useState<Service[]>(() => {
+    const saved = localStorage.getItem("nusify_services");
+    return saved ? JSON.parse(saved) : initServices;
+  });
+  const [pricing, setPricing] = useState<PricingPlan[]>(() => {
+    const saved = localStorage.getItem("nusify_pricing");
+    return saved ? JSON.parse(saved) : initPricing;
+  });
+  const [blog, setBlog] = useState<BlogPost[]>(() => {
+    const saved = localStorage.getItem("nusify_blog_posts");
+    return saved ? JSON.parse(saved) : initBlog;
+  });
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
+    const saved = localStorage.getItem("nusify_testimonials");
+    return saved ? JSON.parse(saved) : initTestimonials;
+  });
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => {
+    const saved = localStorage.getItem("nusify_settings");
+    return saved ? JSON.parse(saved) : initSettings;
+  });
+
+  // Persist data
+  useEffect(() => { localStorage.setItem("nusify_clients", JSON.stringify(clients)); }, [clients]);
+  useEffect(() => { localStorage.setItem("nusify_portfolio", JSON.stringify(portfolio)); }, [portfolio]);
+  useEffect(() => { localStorage.setItem("nusify_services", JSON.stringify(services)); }, [services]);
+  useEffect(() => { localStorage.setItem("nusify_pricing", JSON.stringify(pricing)); }, [pricing]);
+  useEffect(() => { localStorage.setItem("nusify_blog_posts", JSON.stringify(blog)); }, [blog]);
+  useEffect(() => { localStorage.setItem("nusify_testimonials", JSON.stringify(testimonials)); }, [testimonials]);
+  useEffect(() => { localStorage.setItem("nusify_settings", JSON.stringify(siteSettings)); }, [siteSettings]);
 
   const newClients = clients.filter(c => c.status === 'New').length;
   const currentNav = navItems.find(n => n.id === active);
