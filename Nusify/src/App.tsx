@@ -18,6 +18,7 @@ import Blog from "./pages/Blog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import Payment from "./pages/Payment";
 import WhatsAppWidget from "./components/WhatsAppWidget";
 import ServiceOnlineShop from "./pages/service/OnlineShop";
 import Redesign from "./pages/service/Redesign";
@@ -184,6 +185,14 @@ function AppContent() {
               element={
                 <PageTransition>
                   <AdminDashboard />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/payment"
+              element={
+                <PageTransition>
+                  <Payment />
                 </PageTransition>
               }
             />
