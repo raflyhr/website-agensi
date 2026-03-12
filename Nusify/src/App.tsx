@@ -15,10 +15,14 @@ import Portofolio from "./pages/Portofolio";
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/UserDashboard";
 import Payment from "./pages/Payment";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import WhatsAppWidget from "./components/WhatsAppWidget";
 import ServiceOnlineShop from "./pages/service/OnlineShop";
 import Redesign from "./pages/service/Redesign";
@@ -165,6 +169,14 @@ function AppContent() {
               }
             />
             <Route
+              path="/blog/:id"
+              element={
+                <PageTransition>
+                  <BlogDetail />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/login"
               element={
                 <PageTransition>
@@ -183,9 +195,21 @@ function AppContent() {
             <Route
               path="/admin"
               element={
-                <PageTransition>
-                  <AdminDashboard />
-                </PageTransition>
+                <ProtectedRoute requireAdmin>
+                  <PageTransition>
+                    <AdminDashboard />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <UserDashboard />
+                  </PageTransition>
+                </ProtectedRoute>
               }
             />
             <Route
@@ -207,11 +231,14 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <AuthProvider>
+        <ThemeProvider>
+          <AppContent />
+          <WhatsAppWidget />
+        </ThemeProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

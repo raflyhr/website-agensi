@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import {
-  ArrowRight,
-  Clock,
-  Tag,
-  ChevronLeft,
-  ChevronRight,
+import { useParams, useNavigate } from "react-router-dom";
+import { 
+  ArrowLeft, 
+  Clock, 
+  Calendar,
+  Share2,
+  Bookmark,
+  ChevronRight
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface BlogPost {
   id: number;
@@ -15,8 +17,8 @@ interface BlogPost {
   category: string;
   readTime: string;
   image: string;
-  content: string; // Tambahkan kolom konten
-  date: string;    // Tambahkan kolom tanggal
+  date: string;
+  content: string;
 }
 
 const mockPosts: BlogPost[] = [
@@ -171,148 +173,194 @@ const mockPosts: BlogPost[] = [
   },
 ];
 
-const Blog = () => {
+const BlogDetail = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 6;
+  const [post, setPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
+    // 1. Coba cari di localStorage
     const savedPosts = localStorage.getItem("nusify_blog_posts");
+    let foundPost = null;
+
     if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    } else {
-      setPosts(mockPosts);
+      const posts: BlogPost[] = JSON.parse(savedPosts);
+      foundPost = posts.find((p) => p.id === Number(id));
     }
-  }, []);
 
-  // Pagination Logic
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+    // 2. Jika tidak ada di localStorage, cari di mockPosts
+    if (!foundPost) {
+      foundPost = mockPosts.find((p) => p.id === Number(id));
+    }
 
-  const paginate = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    if (foundPost) {
+      setPost(foundPost);
+    }
+
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  if (!post) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-900">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Post not found</h2>
+          <button 
+            onClick={() => navigate("/blog")}
+            className="text-blue-600 font-bold flex items-center gap-2 mx-auto"
+          >
+            <ArrowLeft size={18} /> Kembali ke Blog
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-slate-900 pb-24">
-      {/* Background Decorations */}
-      <div className="bg-ornament-blue"></div>
-      <div className="bg-ornament-purple"></div>
-
-      <header className="pt-32 pb-16 px-6 max-w-7xl mx-auto relative z-10 text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6">
-          Our <span className="text-blue-600 dark:text-blue-400">Insights</span>
-        </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Dapatkan tips terbaru seputar teknologi, desain, dan strategi digital
-          untuk mengembangkan bisnis Anda.
-        </p>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {currentPosts.map((post) => (
-            <article
-              key={post.id}
-              onClick={() => navigate(`/blog/${post.id}`)}
-              className="group flex flex-col bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-24">
+      {/* Hero Section */}
+      <div className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
+        <img 
+          src={post.image} 
+          alt={post.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+        
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-20">
+          <div className="max-w-4xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap items-center gap-4 mb-6"
             >
-              {/* Image Container */}
-              <div className="aspect-16/10 overflow-hidden relative">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
+              <span className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full">
+                {post.category}
+              </span>
+              <span className="flex items-center text-slate-300 text-xs font-semibold">
+                <Clock size={14} className="mr-1.5" />
+                {post.readTime}
+              </span>
+              <span className="flex items-center text-slate-300 text-xs font-semibold">
+                <Calendar size={14} className="mr-1.5" />
+                {post.date}
+              </span>
+            </motion.div>
 
-              {/* Content */}
-              <div className="p-8 flex flex-col grow">
-                <div className="flex items-center gap-4 mb-4 text-xs font-bold uppercase tracking-wider">
-                  <span className="flex items-center text-blue-600 dark:text-blue-400">
-                    <Tag className="w-3 h-3 mr-1.5" />
-                    {post.category}
-                  </span>
-                  <span className="flex items-center text-slate-400 dark:text-slate-500 border-l border-slate-200 dark:border-slate-700 pl-4">
-                    <Clock className="w-3 h-3 mr-1.5" />
-                    {post.readTime}
-                  </span>
-                </div>
-
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {post.title}
-                </h2>
-
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3">
-                  {post.excerpt}
-                </p>
-
-                <div className="mt-auto pt-6 border-t border-slate-50 dark:border-slate-700/50">
-                  <span className="inline-flex items-center text-sm font-extrabold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all">
-                    Read More
-                    <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" />
-                  </span>
-                </div>
-              </div>
-            </article>
-          ))}
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-8"
+            >
+              {post.title}
+            </motion.h1>
+          </div>
         </div>
+      </div>
 
-        {/* Pagination Logic Implementation */}
-        <div className="flex justify-center items-center gap-3">
-          <button
-            onClick={() => paginate(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            className={`flex items-center px-4 py-2 text-sm font-bold transition-all ${
-              currentPage === 1
-                ? "text-slate-300 cursor-not-allowed"
-                : "text-slate-600 dark:text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Prev
-          </button>
-
-          <div className="flex items-center gap-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => paginate(page)}
-                className={`w-10 h-10 rounded-xl text-sm font-bold transition-all overflow-hidden relative group ${
-                  currentPage === page
-                    ? "text-white"
-                    : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-                }`}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Breadcrumbs & Actions */}
+          <div className="lg:col-span-12 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-8">
+            <nav className="flex items-center gap-2 text-sm font-bold">
+              <button 
+                onClick={() => navigate("/")}
+                className="text-slate-400 hover:text-blue-600 transition-colors"
               >
-                {currentPage === page && (
-                  <span className="absolute inset-0 bg-blue-600 shadow-lg shadow-blue-500/30"></span>
-                )}
-                <span className="relative z-10">{page}</span>
+                Home
               </button>
-            ))}
+              <ChevronRight size={14} className="text-slate-300" />
+              <button 
+                onClick={() => navigate("/blog")}
+                className="text-slate-400 hover:text-blue-600 transition-colors"
+              >
+                Blog
+              </button>
+              <ChevronRight size={14} className="text-slate-300" />
+              <span className="text-blue-600 truncate max-w-[200px]">{post.title}</span>
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <button className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-blue-600 hover:text-white transition-all">
+                <Share2 size={18} />
+              </button>
+              <button className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-blue-600 hover:text-white transition-all">
+                <Bookmark size={18} />
+              </button>
+            </div>
           </div>
 
-          <button
-            onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage === totalPages}
-            className={`flex items-center px-4 py-2 text-sm font-bold transition-all ${
-              currentPage === totalPages
-                ? "text-slate-300 cursor-not-allowed"
-                : "text-slate-600 dark:text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            Next
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </button>
+          {/* Sidebar Left: Author/Info */}
+          <aside className="lg:col-span-3 space-y-8">
+            <div className="p-6 bg-slate-50 dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-black">
+                  N
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Nusify Team</h4>
+                  <p className="text-xs text-slate-500">Expert Content Creator</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                Membantu bisnis bertransformasi secara digital dengan solusi teknologi tepat guna.
+              </p>
+              <button className="w-full py-3 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-widest rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white transition-all">
+                Follow Team
+              </button>
+            </div>
+
+            <div className="hidden lg:block">
+              <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Tags</h5>
+              <div className="flex flex-wrap gap-2">
+                {[post.category, "Technology", "Digital", "Business"].map((tag) => (
+                  <span key={tag} className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-lg border border-slate-200 dark:border-slate-700">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          {/* Article Full Content */}
+          <article className="lg:col-span-9">
+            <div 
+              className="prose prose-lg dark:prose-invert max-w-none 
+                prose-headings:font-black prose-headings:text-slate-900 dark:prose-headings:text-white
+                prose-p:text-slate-600 dark:prose-p:text-slate-400 prose-p:leading-relaxed
+                prose-strong:text-slate-900 dark:prose-strong:text-white
+                prose-img:rounded-[2.5rem] prose-img:shadow-2xl
+              "
+              dangerouslySetInnerHTML={{ __html: post.content || `
+                <h2>Introduction</h2>
+                <p>${post.excerpt}</p>
+                <p>Maaf, artikel ini belum memiliki konten lengkap. Konten utuh akan segera diupdate oleh tim editorial Nusify.</p>
+                <blockquote>Lakukan otomasi sebelum kompetitor Anda melakukannya.</blockquote>
+              ` }}
+            />
+
+            <div className="mt-20 pt-10 border-t border-slate-100 dark:border-slate-800">
+              <h4 className="text-xl font-black text-slate-900 dark:text-white mb-8">What do you think?</h4>
+              <div className="p-8 bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
+                <textarea 
+                  placeholder="Leave a comment..."
+                  className="w-full bg-white dark:bg-slate-800 border-none rounded-2xl p-6 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 transition-all shadow-sm"
+                  rows={4}
+                ></textarea>
+                <div className="flex justify-end mt-4">
+                  <button className="px-8 py-3 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all">
+                    Post Comment
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
 
-export default Blog;
+export default BlogDetail;

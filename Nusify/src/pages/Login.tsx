@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Zap, ArrowRight, Chrome, ArrowLeft } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,11 +13,23 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    // TODO: Replace with real backend auth
+
+    // 1. Cek Admin (Hardcoded)
     if (email === 'Nusify@admin.com' && password === 'Nusify03') {
+      login({ id: 'admin', name: 'Nusify Admin', email, role: 'admin' });
       navigate('/admin');
+      return;
+    }
+
+    // 2. Cek User dari localStorage
+    const savedUsers = JSON.parse(localStorage.getItem('nusify_users') || '[]');
+    const foundUser = savedUsers.find((u: any) => u.email === email && u.password === password);
+
+    if (foundUser) {
+      login({ id: foundUser.id, name: foundUser.name, email, role: 'user' });
+      navigate('/dashboard');
     } else {
-      setError('Email or password is incorrect.');
+      setError('Email atau password salah.');
     }
   };
 
@@ -61,7 +75,7 @@ const Login = () => {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Email address
                 </label>
                 <div className="relative group">
@@ -80,7 +94,7 @@ const Login = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Password
                 </label>
                 <div className="relative group">

@@ -1,16 +1,43 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Zap, ArrowRight, Chrome, ArrowLeft } from 'lucide-react';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log('Registration attempt with:', { name, email, password });
+    setError('');
+    
+    // 1. Ambil data user yang sudah ada
+    const existingUsers = JSON.parse(localStorage.getItem('nusify_users') || '[]');
+    
+    // 2. Cek apakah email sudah terdaftar
+    if (existingUsers.find((u: any) => u.email === email)) {
+      setError('Email ini sudah terdaftar.');
+      return;
+    }
+
+    // 3. Simpan user baru
+    const newUser = {
+      id: Date.now().toString(),
+      name,
+      email,
+      password, // Dalam sistem nyata, password harus di-hash
+      role: 'user'
+    };
+
+    localStorage.setItem('nusify_users', JSON.stringify([...existingUsers, newUser]));
+    
+    setSuccess(true);
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
   };
 
   return (
@@ -45,6 +72,18 @@ const Register = () => {
               Join us to start building amazing projects.
             </p>
           </div>
+
+          {error && (
+            <div className="mt-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 text-sm font-medium text-red-600 dark:text-red-400 text-center">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="mt-4 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 text-sm font-medium text-green-600 dark:text-green-400 text-center">
+              Registrasi berhasil! Mengalihkan ke halaman login...
+            </div>
+          )}
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
