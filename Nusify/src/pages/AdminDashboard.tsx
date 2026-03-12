@@ -140,7 +140,7 @@ const initBlog: BlogPost[] = [
     date: "2024-02-10",
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop",
     content: `<h2>Tools Wajib Web Developer</h2><p>Sekecil apapun delay pada website Anda, itu bisa menghilangkan potensi pelanggan.</p><p>Gunakan tools seperti <strong>Google PageSpeed Insights</strong> untuk audit, <strong>TinyPNG</strong> untuk optimasi gambar, dan <strong>Vite</strong> untuk development workflow yang lebih efisien.</p><p>Ingat, 1 detik saja lebih lambat bisa menurunkan tingkat konversi hingga 7%.</p>`
-  },
+  }
 ];
 const initTestimonials: Testimonial[] = [
   { id: 1, name: 'Budi Santoso', company: 'PT. Maju Bersama', review: 'Hasilnya luar biasa! Website kami kini tampak sangat profesional dan modern.', rating: 5 },
@@ -940,7 +940,12 @@ const AdminDashboard = () => {
   });
   const [blog, setBlog] = useState<BlogPost[]>(() => {
     const saved = localStorage.getItem("nusify_blog_posts");
-    return saved ? JSON.parse(saved) : initBlog;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Recovery logic: Jika data kosong atau sangat sedikit (akibat merge), kembalikan ke init/reset
+      if (Array.isArray(parsed) && parsed.length > 2) return parsed;
+    }
+    return initBlog;
   });
   const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
     const saved = localStorage.getItem("nusify_testimonials");
