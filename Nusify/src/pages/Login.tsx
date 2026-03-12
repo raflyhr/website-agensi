@@ -27,7 +27,7 @@ const Login = () => {
 
     if (foundUser) {
       login({ id: foundUser.id, name: foundUser.name, email, role: 'user' });
-      navigate('/dashboard');
+      navigate('/pricing');
     } else {
       setError('Email atau password salah.');
     }

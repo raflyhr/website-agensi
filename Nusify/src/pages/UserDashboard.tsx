@@ -2,7 +2,6 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
   User, 
-  Settings, 
   LogOut, 
   LayoutDashboard, 
   Briefcase, 
@@ -55,12 +54,6 @@ const UserDashboard = () => {
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-4 w-full md:w-auto">
-              <button 
-                onClick={() => navigate('/settings')}
-                className="p-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
-              >
-                <Settings size={20} />
-              </button>
               <button 
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-6 py-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 rounded-2xl font-bold hover:bg-red-100 dark:hover:bg-red-900/20 transition-all active:scale-95"
