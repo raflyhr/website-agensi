@@ -78,15 +78,15 @@ const Contact = () => {
                 </div>
                 <p className="font-bold text-slate-900 dark:text-white">PT NUSIFY DIGITAL KREATIF</p>
                 <p className="text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-                  Jl. Tarumanegara II No.18a, Bogor Selatan,<br />
-                  Jawa Barat, Indonesia 16137
+                  Jl. Ring Road Utara, Condong Catur, Depok, Sleman,<br />
+                  Yogyakarta, Indonesia 55281
                 </p>
               </div>
 
               {/* Map Container */}
               <div className="grow min-h-[300px] relative bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15852.793774845!2d106.7909!3d-6.6231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5c772099351%3A0x2a98f12128a313e6!2sBogor%20Selatan%2C%20Bogor%20City%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1710000000000!5m2!1sen!2sid" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3994.4603841135877!2d110.40656067505181!3d-7.760060192259019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a599bd3bdc4ef%3A0x6f1714b0c4544586!2sUniversitas%20Amikom%20Yogyakarta!5e1!3m2!1sid!2sid!4v1773497174186!5m2!1sid!2sid" 
                   className="absolute inset-0 w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
                   allowFullScreen
                   loading="lazy"
