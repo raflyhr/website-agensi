@@ -97,22 +97,7 @@ const UserDashboard = () => {
               </div>
             </div>
 
-            {/* Support Section */}
-            <div className="bg-linear-to-r from-blue-600 to-indigo-700 rounded-4xl p-8 text-white shadow-xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-500"></div>
-              <div className="relative flex flex-col sm:flex-row items-center gap-6">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
-                  <MessageSquare size={32} />
-                </div>
-                <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-xl font-bold mb-1">Butuh Bantuan?</h3>
-                  <p className="text-blue-100 text-sm">Konsultasikan kendala atau request fitur baru dengan tim kami.</p>
-                </div>
-                <button className="px-6 py-3 bg-white text-blue-700 rounded-xl font-bold text-sm shadow-lg hover:bg-blue-50 transition-colors active:scale-95">
-                  Chat Team Support
-                </button>
-              </div>
-            </div>
+
           </div>
 
           {/* Sidebar Area */}

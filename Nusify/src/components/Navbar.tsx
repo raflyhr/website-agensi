@@ -18,7 +18,7 @@ import logoImg from "../assets/Logo.png";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -468,7 +468,7 @@ const Navbar = () => {
                 }`}>
                   <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 rounded-2xl shadow-2xl p-2 space-y-1">
                     <Link 
-                      to="/dashboard"
+                      to={isAdmin ? "/admin" : "/dashboard"}
                       className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 rounded-xl transition-all group"
                     >
                       <LayoutDashboard size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
@@ -642,7 +642,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="space-y-2">
                 <Link
-                  to="/dashboard"
+                  to={isAdmin ? "/admin" : "/dashboard"}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center gap-4 w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
                 >

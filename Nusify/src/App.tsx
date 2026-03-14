@@ -115,9 +115,11 @@ function AppContent() {
             <Route
               path="/pricing"
               element={
-                <PageTransition>
-                  <Pricing />
-                </PageTransition>
+                <ProtectedRoute>
+                  <PageTransition>
+                    <Pricing />
+                  </PageTransition>
+                </ProtectedRoute>
               }
             />
             <Route

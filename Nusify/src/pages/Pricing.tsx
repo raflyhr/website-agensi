@@ -7,7 +7,6 @@ import {
   MapPin,
   Star,
   MessageCircle,
-  Layout,
   Rocket,
 } from "lucide-react";
 
@@ -113,7 +112,7 @@ const PortfolioCategory = ({
 const Pricing = () => {
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
-  const [activeCategory, setActiveCategory] = useState("Company Profile");
+  const [activeCategory, setActiveCategory] = useState("Semua");
 
   return (
     <div className="relative min-h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
@@ -303,13 +302,13 @@ const Pricing = () => {
       </section>
 
       {/* Portfolio Showcase */}
-      <section className="max-w-7xl mx-auto px-6 mb-32">
+      <section className="max-w-7xl mx-auto px-6 mb-32" id="portfolio">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-6 italic underline decoration-blue-600 decoration-4 underline-offset-8">
             Contoh website untuk inspirasi?
           </h2>
           <div className="flex flex-wrap justify-center gap-4">
-            {["Toko Online", "Landing Page"].map((cat) => (
+            {["Semua", "Toko Online", "Kesehatan"].map((cat) => (
               <PortfolioCategory
                 key={cat}
                 title={cat}
@@ -321,18 +320,41 @@ const Pricing = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[1, 2, 3].map((item) => (
+          {[
+            {
+              id: 1,
+              title: "Deep Chock Ubi",
+              image: "/portfolio/deep cook (1).png",
+              category: "Toko Online",
+              link: "https://www.deepchock.shop/",
+            },
+            {
+              id: 2,
+              title: "NeoRain",
+              image: "/portfolio/neorain.png",
+              category: "Kesehatan",
+              link: "https://neorain.vercel.app/",
+            },
+            {
+              id: 3,
+              title: "Temora Coffee",
+              image: "/portfolio/coffee.png",
+              category: "Toko Online",
+              link: "https://temora-coffee-khaki.vercel.app/",
+            },
+          ].map((item) => (
             <div
-              key={item}
-              className="group relative rounded-3xl overflow-hidden aspect-4/3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 shadow-sm"
+              key={item.id}
+              className={`group relative rounded-3xl overflow-hidden aspect-4/3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 ${activeCategory === "Semua" || activeCategory === item.category ? "block opacity-100" : "hidden opacity-0"}`}
             >
-              <div className="w-full h-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400">
-                <Layout size={40} />
+              <div className="w-full h-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400 overflow-hidden">
+                <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <button className="bg-white text-slate-900 px-6 py-2 rounded-xl font-bold">
+              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
+                <p className="text-white font-bold text-lg">{item.title}</p>
+                <a href={item.link} target="_blank" rel="noopener noreferrer" className="bg-white text-slate-900 px-6 py-2 rounded-xl font-bold hover:bg-blue-50 transition-colors">
                   Lihat Detail
-                </button>
+                </a>
               </div>
             </div>
           ))}

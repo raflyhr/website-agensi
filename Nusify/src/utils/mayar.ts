@@ -50,22 +50,8 @@ export const getMayar = () => {
  * Handle Mayar Popup Checkout
  */
 export const openMayarPopup = async (token: string, fallbackUrl: string) => {
-  try {
-    const Mayar = await getMayar();
-    
-    // Jika script berhasil load dan mode popup didukung
-    if (Mayar && typeof Mayar.openCheckout === 'function') {
-      Mayar.openCheckout({
-        token: token,
-        type: 'modal'
-      });
-    } else {
-      // Jika popup gagal/tidak didukung, langsung redirect ke link pembayaran
-      window.location.href = fallbackUrl;
-    }
-  } catch (error) {
-    window.location.href = fallbackUrl;
-  }
+  // Langsung redirect ke payment link untuk menghindari script popup yang usang/bermasalah
+  window.location.href = fallbackUrl;
 };
 
 /**
@@ -79,9 +65,9 @@ export const createMayarSession = async (data: MayarPaymentRequest, apiKey: stri
     data: {
       token: "sandbox_token_" + Date.now(),
       /**
-       * 💡 TIPS: Menggunakan link langsung ke portal sandbox Anda
+       * 💡 TIPS: Menggunakan link langsung ke portal Anda
        */
-      redirect_url: `https://rafly-hr-94664.myr.id/payme` 
+      redirect_url: `https://rafly-hr-46484.myr.id/payme` 
     }
   };
 };
