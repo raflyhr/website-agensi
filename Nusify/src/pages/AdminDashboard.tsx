@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Briefcase, Settings, LogOut,
-  TrendingUp, Eye, MessageSquare, Star, Menu, X, Zap, Bell,
+  TrendingUp, Eye, Star, Menu, X, Zap, Bell,
   FileText, Tag, Plus, Pencil, Trash2, Check, ChevronDown,
   Globe, Instagram, Twitter, Facebook, Youtube, Phone, Mail,
-  Sun, Moon,
+  Sun, Moon, MessageSquare,
 } from 'lucide-react';
 import { useTheme } from "../context/theme-core";
 
@@ -916,7 +916,7 @@ const navItems: { id: Section; label: string; icon: React.FC<{ className?: strin
 ];
 
 const AdminDashboard = () => {
-  const { theme, toggleTheme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const isDark = theme === 'dark';
   const setIsDark = (v: boolean) => setTheme(v ? 'dark' : 'light');
 

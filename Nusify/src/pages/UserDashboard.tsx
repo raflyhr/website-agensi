@@ -5,7 +5,6 @@ import {
   LogOut, 
   LayoutDashboard, 
   Briefcase, 
-  MessageSquare,
   Clock,
   ExternalLink,
   ShieldCheck,
