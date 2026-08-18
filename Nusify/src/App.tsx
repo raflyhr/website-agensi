@@ -237,7 +237,6 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <AppContent />
-          <WhatsAppWidget />
         </ThemeProvider>
       </AuthProvider>
     </Router>

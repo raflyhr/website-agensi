@@ -91,6 +91,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Auto close mobile menu when location changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsAboutDropdownOpen(false);
+    setIsServicesDropdownOpen(false);
+    setIsProfileDropdownOpen(false);
+  }, [location.pathname]);
+
   const navLinks = [
     { name: "Portfolio", path: "/portfolio" },
     { name: "Pricing", path: "/pricing" },
@@ -113,7 +121,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-[9999] transition-all duration-500 ${
         isScrolled
           ? "bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg shadow-xl border-b border-white/20 dark:border-slate-800/50 py-3"
           : "bg-transparent py-4"
@@ -122,15 +130,15 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Left Section: Nusify Logo (Home Button) */}
-          <div className="flex-shrink-0 relative w-32 h-10">
+          <div className="flex-shrink-0">
             <Link
               to="/"
-              className="absolute top-1/2 -translate-y-1/2 -left-10 -bottom-10 flex items-center group"
+              className="flex items-center group"
             >
               <img
                 src={logoImg}
                 alt="Nusify Logo"
-                className="h-[200px] w-auto max-w-none transform group-hover:scale-105 transition-all duration-300 drop-shadow-lg"
+                className="h-10 md:h-12 w-auto transform group-hover:scale-105 transition-all duration-300 drop-shadow-md"
               />
             </Link>
           </div>
@@ -528,13 +536,13 @@ const Navbar = () => {
 
       {/* Mobile Menu Dropdown */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full transition-all duration-500 ease-in-out ${
+        className={`md:hidden absolute top-full left-0 w-full z-[10000] transition-all duration-500 ease-in-out ${
           isMobileMenuOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="mx-4 mt-2 p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-2xl space-y-2">
+        <div className="mx-4 mt-2 p-4 pb-24 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-2xl space-y-2 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide">
           {/* Mobile About with Submenu */}
           <div className="space-y-1">
             <button
@@ -596,7 +604,7 @@ const Navbar = () => {
                     key={service.title}
                     to={service.path}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full text-left px-5 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                    className="block w-full text-left px-5 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] transition-all"
                   >
                     <div className="text-sm font-bold text-slate-700 dark:text-slate-300">
                       {service.title}
@@ -611,20 +619,14 @@ const Navbar = () => {
           </div>
 
           {navLinks.map((link) => (
-            <NavLink
+            <Link
               key={link.name}
               to={link.path}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `block px-5 py-4 text-base font-bold rounded-2xl transition-all duration-200 ${
-                  isActive
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`
-              }
+              className="block px-5 py-4 text-base font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] rounded-2xl transition-all duration-200"
             >
               {link.name}
-            </NavLink>
+            </Link>
           ))}
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
             <button
@@ -644,7 +646,7 @@ const Navbar = () => {
                 <Link
                   to={isAdmin ? "/admin" : "/dashboard"}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-4 w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold"
+                  className="flex items-center gap-4 w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-bold active:scale-[0.98] transition-all"
                 >
                   <div className="w-10 h-10 bg-linear-to-br from-brand-blue to-brand-purple rounded-full flex items-center justify-center text-white font-bold">
                     {user?.name.charAt(0).toUpperCase()}
@@ -656,7 +658,7 @@ const Navbar = () => {
                   <ChevronRight size={18} className="text-slate-400" />
                 </Link>
                 <button
-                  onClick={() => { logout(); setIsMobileMenuOpen(false); navigate('/login'); }}
+                  onClick={() => { logout(); navigate('/login'); }}
                   className="flex items-center justify-center w-full px-6 py-4 text-red-600 bg-red-50 dark:bg-red-900/10 font-bold rounded-2xl"
                 >
                   <LogOut size={18} className="mr-2" /> Logout
@@ -666,7 +668,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg"
+                className="flex items-center justify-center w-full px-6 py-4 text-white font-bold bg-gradient-to-r from-brand-blue to-brand-purple rounded-2xl shadow-lg active:scale-[0.98] transition-all"
               >
                 Start Project
               </Link>
